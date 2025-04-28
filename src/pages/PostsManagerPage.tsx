@@ -33,6 +33,8 @@ import {
   useSearchPosts,
   useUpdatePost,
 } from "../features/post-management/api/api"
+import { useCommentsByPostId } from "../features/comment-management/api/api"
+import { useUserById } from "../features/user-management/api/api"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -68,6 +70,14 @@ const PostsManager = () => {
   const updatePostMutation = useUpdatePost()
   const deletePostMutation = useDeletePost()
   const addPostMutation = useAddPost()
+  const { data: commentsData, isLoading: commentsLoading } = useCommentsByPostId(selectedPost?.id)
+  const {
+    data: userData,
+    isLoading: userDataLoading,
+    error: userDataError,
+  } = useUserById(selectedUser?.id, {
+    enabled: !!selectedUser?.id && showUserModal,
+  })
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -116,6 +126,11 @@ const PostsManager = () => {
         console.error("게시물 추가 오류:", error)
       },
     })
+  }
+
+  const handleOpenUserModal = async (user) => {
+    setSelectedUser(user) // 기본 정보로 먼저 설정
+    setShowUserModal(true) // 모달 표시
   }
 
   // 표시할 게시물 결정 로직 추가
@@ -277,19 +292,6 @@ const PostsManager = () => {
     fetchComments(post.id)
     setShowPostDetailDialog(true)
   }
-
-  // 사용자 모달 열기
-  const openUserModal = async (user) => {
-    try {
-      const response = await fetch(`/api/users/${user.id}`)
-      const userData = await response.json()
-      setSelectedUser(userData)
-      setShowUserModal(true)
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
-  }
-
   useEffect(() => {
     if (selectedTag) {
       fetchPostsByTag(selectedTag)
@@ -365,7 +367,10 @@ const PostsManager = () => {
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
+              <div
+                className="flex items-center space-x-2 cursor-pointer"
+                onClick={() => handleOpenUserModal(post.author)}
+              >
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
               </div>
@@ -405,52 +410,55 @@ const PostsManager = () => {
   )
 
   // 댓글 렌더링
-  const renderComments = (postId) => (
-    <div className="mt-2">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold">댓글</h3>
-        <Button
-          size="sm"
-          onClick={() => {
-            setNewComment((prev) => ({ ...prev, postId }))
-            setShowAddCommentDialog(true)
-          }}
-        >
-          <Plus className="w-3 h-3 mr-1" />
-          댓글 추가
-        </Button>
-      </div>
-      <div className="space-y-1">
-        {comments[postId]?.map((comment) => (
-          <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
-            <div className="flex items-center space-x-2 overflow-hidden">
-              <span className="font-medium truncate">{comment.user.username}:</span>
-              <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
+  const renderComments = (postId) => {
+    const commentsToShow = (postId === selectedPost?.id && commentsData?.comments) || comments[postId] || []
+    return (
+      <div className="mt-2">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-semibold">댓글</h3>
+          <Button
+            size="sm"
+            onClick={() => {
+              setNewComment((prev) => ({ ...prev, postId }))
+              setShowAddCommentDialog(true)
+            }}
+          >
+            <Plus className="w-3 h-3 mr-1" />
+            댓글 추가
+          </Button>
+        </div>
+        <div className="space-y-1">
+          {commentsToShow[postId]?.map((comment) => (
+            <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
+              <div className="flex items-center space-x-2 overflow-hidden">
+                <span className="font-medium truncate">{comment.user.username}:</span>
+                <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
+                  <ThumbsUp className="w-3 h-3" />
+                  <span className="ml-1 text-xs">{comment.likes}</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedComment(comment)
+                    setShowEditCommentDialog(true)
+                  }}
+                >
+                  <Edit2 className="w-3 h-3" />
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
+                  <Trash2 className="w-3 h-3" />
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center space-x-1">
-              <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
-                <ThumbsUp className="w-3 h-3" />
-                <span className="ml-1 text-xs">{comment.likes}</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  setSelectedComment(comment)
-                  setShowEditCommentDialog(true)
-                }}
-              >
-                <Edit2 className="w-3 h-3" />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
-                <Trash2 className="w-3 h-3" />
-              </Button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
@@ -658,14 +666,19 @@ const PostsManager = () => {
             <DialogTitle>사용자 정보</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <img src={selectedUser?.image} alt={selectedUser?.username} className="w-24 h-24 rounded-full mx-auto" />
-            <h3 className="text-xl font-semibold text-center">{selectedUser?.username}</h3>
+            <img
+              src={userData?.image || selectedUser?.image}
+              alt={userData?.username || selectedUser?.username}
+              className="w-24 h-24 rounded-full mx-auto"
+            />
+            <h3 className="text-xl font-semibold text-center">{userData?.username || selectedUser?.username}</h3>
             <div className="space-y-2">
               <p>
-                <strong>이름:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
+                <strong>이름:</strong> {userData?.firstName || selectedUser?.firstName}{" "}
+                {userData?.lastName || selectedUser?.lastName}
               </p>
               <p>
-                <strong>나이:</strong> {selectedUser?.age}
+                <strong>나이:</strong> {userData?.age || selectedUser?.age}
               </p>
               <p>
                 <strong>이메일:</strong> {selectedUser?.email}
