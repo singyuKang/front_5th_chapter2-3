@@ -26,13 +26,12 @@ import {
   Textarea,
 } from "../shared/ui"
 import { useTagsList } from "../entities/tag/model/model"
+import { usePostsWithUsers, useSearchPosts } from "../features/post-management/api/api"
 
 const PostsManager = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
-
-  const { data: tags, isLoading: tagsLoading, error: tagsError } = useTagsList()
 
   // 상태 관리
   const [posts, setPosts] = useState([])
@@ -57,6 +56,10 @@ const PostsManager = () => {
   const [showUserModal, setShowUserModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
 
+  const { data: tags, isLoading: tagsLoading, error: tagsError } = useTagsList()
+  // const { posts, total, isLoading } = usePostsWithUsers({ limit, skip });
+  const { data: searchResult, isLoading: searchLoading, isError: searchError } = useSearchPosts(searchQuery)
+
   // URL 업데이트 함수
   const updateURL = () => {
     const params = new URLSearchParams()
@@ -68,6 +71,19 @@ const PostsManager = () => {
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
   }
+
+  const handleSearch = () => {
+    updateURL()
+  }
+
+  // 표시할 게시물 결정 로직 추가
+  const postsToDisplay = searchQuery
+    ? searchResult?.posts || [] // 검색어가 있으면 검색 결과 사용
+    : posts // 없으면 기본 게시물 목록 사용
+
+  const totalItems = searchQuery ? searchResult?.total || 0 : total
+
+  const isLoadingData = searchQuery ? searchLoading : loading
 
   // 게시물 가져오기
   const fetchPosts = () => {
@@ -97,24 +113,6 @@ const PostsManager = () => {
       .finally(() => {
         setLoading(false)
       })
-  }
-
-  // 게시물 검색
-  const searchPosts = async () => {
-    if (!searchQuery) {
-      fetchPosts()
-      return
-    }
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/posts/search?q=${searchQuery}`)
-      const data = await response.json()
-      setPosts(data.posts)
-      setTotal(data.total)
-    } catch (error) {
-      console.error("게시물 검색 오류:", error)
-    }
-    setLoading(false)
   }
 
   // 태그별 게시물 가져오기
@@ -342,7 +340,7 @@ const PostsManager = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {posts.map((post) => (
+        {postsToDisplay.map((post) => (
           <TableRow key={post.id}>
             <TableCell>{post.id}</TableCell>
             <TableCell>
@@ -480,7 +478,7 @@ const PostsManager = () => {
                   className="pl-8"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && searchPosts()}
+                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 />
               </div>
             </div>
@@ -527,7 +525,7 @@ const PostsManager = () => {
           </div>
 
           {/* 게시물 테이블 */}
-          {loading ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
+          {isLoadingData ? <div className="flex justify-center p-4">로딩 중...</div> : renderPostTable()}
 
           {/* 페이지네이션 */}
           <div className="flex justify-between items-center">
