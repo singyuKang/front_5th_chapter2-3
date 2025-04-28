@@ -33,7 +33,7 @@ import {
   useSearchPosts,
   useUpdatePost,
 } from "../features/post-management/api/api"
-import { useCommentsByPostId } from "../features/comment-management/api/api"
+import { useCommentsByPostId, useLikeComment } from "../features/comment-management/api/api"
 import { useUserById } from "../features/user-management/api/api"
 
 const PostsManager = () => {
@@ -78,6 +78,8 @@ const PostsManager = () => {
   } = useUserById(selectedUser?.id, {
     enabled: !!selectedUser?.id && showUserModal,
   })
+
+  const likeCommentMutation = useLikeComment()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -131,6 +133,20 @@ const PostsManager = () => {
   const handleOpenUserModal = async (user) => {
     setSelectedUser(user) // 기본 정보로 먼저 설정
     setShowUserModal(true) // 모달 표시
+  }
+
+  const handleLikeComment = (comment, postId) => {
+    likeCommentMutation.mutate(
+      { id: comment.id, likes: comment.likes + 1 },
+      {
+        onSuccess: (data) => {
+          setComments((prev) => ({
+            ...prev,
+            [postId]: prev[postId]?.map((c) => (c.id === data.id ? { ...c, likes: c.likes + 1 } : c)) || [],
+          }))
+        },
+      },
+    )
   }
 
   // 표시할 게시물 결정 로직 추가
@@ -428,14 +444,14 @@ const PostsManager = () => {
           </Button>
         </div>
         <div className="space-y-1">
-          {commentsToShow[postId]?.map((comment) => (
+          {commentsToShow.map((comment) => (
             <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
               <div className="flex items-center space-x-2 overflow-hidden">
                 <span className="font-medium truncate">{comment.user.username}:</span>
                 <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
               </div>
               <div className="flex items-center space-x-1">
-                <Button variant="ghost" size="sm" onClick={() => likeComment(comment.id, postId)}>
+                <Button variant="ghost" size="sm" onClick={() => handleLikeComment(comment.id, postId)}>
                   <ThumbsUp className="w-3 h-3" />
                   <span className="ml-1 text-xs">{comment.likes}</span>
                 </Button>
