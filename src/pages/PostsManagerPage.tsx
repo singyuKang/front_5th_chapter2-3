@@ -36,6 +36,7 @@ import {
 import {
   useAddComment,
   useCommentsByPostId,
+  useDeleteComment,
   useLikeComment,
   useUpdateComment,
 } from "../features/comment-management/api/api"
@@ -87,6 +88,8 @@ const PostsManager = () => {
   const likeCommentMutation = useLikeComment()
   const addCommentMutation = useAddComment()
   const updateCommentMutation = useUpdateComment()
+  const deleteCommentMutation = useDeleteComment()
+
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -195,6 +198,23 @@ const PostsManager = () => {
     )
   }
 
+  const handleDeleteComment = (id, postId) => {
+  deleteCommentMutation.mutate(
+    { id, postId },
+    {
+      onSuccess: () => {
+        // 낙관적 업데이트를 위해 기존 방식 유지
+        setComments((prev) => ({
+          ...prev,
+          [postId]: prev[postId].filter((comment) => comment.id !== id),
+        }));
+      },
+      onError: (error) => {
+        console.error("댓글 삭제 오류:", error);
+      }
+    }
+  );
+
   // 표시할 게시물 결정 로직 추가
   const postsToDisplay = searchQuery
     ? searchResult?.posts || [] // 검색어가 있으면 검색 결과 사용
@@ -273,41 +293,7 @@ const PostsManager = () => {
       console.error("댓글 가져오기 오류:", error)
     }
   }
-
-  // 댓글 업데이트
-  const updateComment = async () => {
-    try {
-      const response = await fetch(`/api/comments/${selectedComment.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: selectedComment.body }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
-      }))
-      setShowEditCommentDialog(false)
-    } catch (error) {
-      console.error("댓글 업데이트 오류:", error)
-    }
-  }
-
-  // 댓글 삭제
-  const deleteComment = async (id, postId) => {
-    try {
-      await fetch(`/api/comments/${id}`, {
-        method: "DELETE",
-      })
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].filter((comment) => comment.id !== id),
-      }))
-    } catch (error) {
-      console.error("댓글 삭제 오류:", error)
-    }
-  }
-
+    
   // 게시물 상세 보기
   const openPostDetail = (post) => {
     setSelectedPost(post)
@@ -471,7 +457,7 @@ const PostsManager = () => {
                 >
                   <Edit2 className="w-3 h-3" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deleteComment(comment.id, postId)}>
+                <Button variant="ghost" size="sm" onClick={() => handleDeleteComment(comment.id, postId)}>
                   <Trash2 className="w-3 h-3" />
                 </Button>
               </div>

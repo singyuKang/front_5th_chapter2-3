@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { addComment, getCommentsByPostId, likeComment, updateComment } from "../../../entities/comment/api/api"
+import {
+  addComment,
+  deleteComment,
+  getCommentsByPostId,
+  likeComment,
+  updateComment,
+} from "../../../entities/comment/api/api"
 
 export const useCommentsByPostId = (postId) => {
   return useQuery({
@@ -39,6 +45,17 @@ export const useUpdateComment = () => {
     mutationFn: updateComment,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["comments", data.postId] })
+    },
+  })
+}
+
+export const useDeleteComment = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: deleteComment,
+    onSuccess: ({ postId }) => {
+      queryClient.invalidateQueries({ queryKey: ["comments", postId] })
     },
   })
 }

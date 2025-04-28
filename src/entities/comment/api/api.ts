@@ -49,3 +49,15 @@ export const updateComment = async ({ id, body }) => {
 
   return response.json()
 }
+
+export const deleteComment = async ({ id, postId }) => {
+  const response = await fetch(`/api/comments/${id}`, {
+    method: "DELETE",
+  })
+
+  if (!response.ok) {
+    throw new Error("댓글 삭제 실패")
+  }
+
+  return { id, postId }
+}
