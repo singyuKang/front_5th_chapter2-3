@@ -26,7 +26,7 @@ import {
   Textarea,
 } from "../shared/ui"
 import { useTagsList } from "../entities/tag/model/model"
-import { usePostsWithUsers, useSearchPosts, useUpdatePost } from "../features/post-management/api/api"
+import { useDeletePost, usePostsWithUsers, useSearchPosts, useUpdatePost } from "../features/post-management/api/api"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -60,6 +60,7 @@ const PostsManager = () => {
   // const { posts, total, isLoading } = usePostsWithUsers({ limit, skip });
   const { data: searchResult, isLoading: searchLoading, isError: searchError } = useSearchPosts(searchQuery)
   const updatePostMutation = useUpdatePost()
+  const deletePostMutation = useDeletePost()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -84,6 +85,14 @@ const PostsManager = () => {
       },
       onError: (error) => {
         console.error("게시물 업데이트 오류:", error)
+      },
+    })
+  }
+
+  const handleDeletePost = (id) => {
+    deletePostMutation.mutate(id, {
+      onError: (error) => {
+        console.error("게시물 삭제 오류:", error)
       },
     })
   }
@@ -169,18 +178,6 @@ const PostsManager = () => {
       setNewPost({ title: "", body: "", userId: 1 })
     } catch (error) {
       console.error("게시물 추가 오류:", error)
-    }
-  }
-
-  // 게시물 삭제
-  const deletePost = async (id) => {
-    try {
-      await fetch(`/api/posts/${id}`, {
-        method: "DELETE",
-      })
-      setPosts(posts.filter((post) => post.id !== id))
-    } catch (error) {
-      console.error("게시물 삭제 오류:", error)
     }
   }
 
@@ -392,7 +389,7 @@ const PostsManager = () => {
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+                <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>

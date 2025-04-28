@@ -29,3 +29,15 @@ export const updatePost = async (postData) => {
 
   return response.json()
 }
+
+export const deletePost = async (id) => {
+  const response = await fetch(`/api/posts/${id}`, {
+    method: "DELETE",
+  })
+
+  if (!response.ok) {
+    throw new Error("게시물 삭제 실패")
+  }
+
+  return response.json()
+}
