@@ -33,7 +33,12 @@ import {
   useSearchPosts,
   useUpdatePost,
 } from "../features/post-management/api/api"
-import { useAddComment, useCommentsByPostId, useLikeComment } from "../features/comment-management/api/api"
+import {
+  useAddComment,
+  useCommentsByPostId,
+  useLikeComment,
+  useUpdateComment,
+} from "../features/comment-management/api/api"
 import { useUserById } from "../features/user-management/api/api"
 
 const PostsManager = () => {
@@ -81,6 +86,7 @@ const PostsManager = () => {
 
   const likeCommentMutation = useLikeComment()
   const addCommentMutation = useAddComment()
+  const updateCommentMutation = useUpdateComment()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -167,6 +173,28 @@ const PostsManager = () => {
     })
   }
 
+  const handleUpdateComment = () => {
+    if (!selectedComment) return
+
+    updateCommentMutation.mutate(
+      { id: selectedComment.id, body: selectedComment.body },
+      {
+        onSuccess: (data) => {
+          // 낙관적 업데이트를 위해 기존 방식 유지
+          setComments((prev) => ({
+            ...prev,
+            [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
+          }))
+
+          setShowEditCommentDialog(false)
+        },
+        onError: (error) => {
+          console.error("댓글 업데이트 오류:", error)
+        },
+      },
+    )
+  }
+
   // 표시할 게시물 결정 로직 추가
   const postsToDisplay = searchQuery
     ? searchResult?.posts || [] // 검색어가 있으면 검색 결과 사용
@@ -246,26 +274,6 @@ const PostsManager = () => {
     }
   }
 
-  // 댓글 추가
-  const addComment = async () => {
-    try {
-      const response = await fetch("/api/comments/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newComment),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [data.postId]: [...(prev[data.postId] || []), data],
-      }))
-      setShowAddCommentDialog(false)
-      setNewComment({ body: "", postId: null, userId: 1 })
-    } catch (error) {
-      console.error("댓글 추가 오류:", error)
-    }
-  }
-
   // 댓글 업데이트
   const updateComment = async () => {
     try {
@@ -297,26 +305,6 @@ const PostsManager = () => {
       }))
     } catch (error) {
       console.error("댓글 삭제 오류:", error)
-    }
-  }
-
-  // 댓글 좋아요
-  const likeComment = async (id, postId) => {
-    try {
-      const response = await fetch(`/api/comments/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ likes: comments[postId].find((c) => c.id === id).likes + 1 }),
-      })
-      const data = await response.json()
-      setComments((prev) => ({
-        ...prev,
-        [postId]: prev[postId].map((comment) =>
-          comment.id === data.id ? { ...data, likes: comment.likes + 1 } : comment,
-        ),
-      }))
-    } catch (error) {
-      console.error("댓글 좋아요 오류:", error)
     }
   }
 
@@ -675,7 +663,7 @@ const PostsManager = () => {
               value={selectedComment?.body || ""}
               onChange={(e) => setSelectedComment({ ...selectedComment, body: e.target.value })}
             />
-            <Button onClick={updateComment}>댓글 업데이트</Button>
+            <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
           </div>
         </DialogContent>
       </Dialog>

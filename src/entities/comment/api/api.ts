@@ -35,3 +35,17 @@ export const addComment = async (commentData) => {
 
   return response.json()
 }
+
+export const updateComment = async ({ id, body }) => {
+  const response = await fetch(`/api/comments/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ body }),
+  })
+
+  if (!response.ok) {
+    throw new Error("댓글 업데이트 실패")
+  }
+
+  return response.json()
+}
