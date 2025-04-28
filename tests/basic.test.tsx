@@ -10,15 +10,6 @@ import "@testing-library/jest-dom"
 import { TEST_POSTS, TEST_SEARCH_POST, TEST_USERS } from "./mockData"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
-const createTestQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-      },
-    },
-  })
-
 // MSW 서버 설정
 const server = setupServer(
   http.get("/api/posts", () => {
@@ -55,9 +46,9 @@ afterAll(() => server.close())
 
 // 테스트에 공통으로 사용될 render 함수
 const renderPostsManager = () => {
-  const testQueryClient = createTestQueryClient()
+  const queryClient = new QueryClient()
   return render(
-    <QueryClientProvider client={testQueryClient}>
+    <QueryClientProvider client={queryClient}>
       <MemoryRouter>
         <PostsManager />
       </MemoryRouter>
