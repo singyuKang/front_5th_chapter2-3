@@ -84,12 +84,12 @@ const PostsManager = () => {
   } = useUserById(selectedUser?.id, {
     enabled: !!selectedUser?.id && showUserModal,
   })
+  // console.log("🚀 ~ PostsManager ~ userData:", userData)
 
   const likeCommentMutation = useLikeComment()
   const addCommentMutation = useAddComment()
   const updateCommentMutation = useUpdateComment()
   const deleteCommentMutation = useDeleteComment()
-
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -199,21 +199,22 @@ const PostsManager = () => {
   }
 
   const handleDeleteComment = (id, postId) => {
-  deleteCommentMutation.mutate(
-    { id, postId },
-    {
-      onSuccess: () => {
-        // 낙관적 업데이트를 위해 기존 방식 유지
-        setComments((prev) => ({
-          ...prev,
-          [postId]: prev[postId].filter((comment) => comment.id !== id),
-        }));
+    deleteCommentMutation.mutate(
+      { id, postId },
+      {
+        onSuccess: () => {
+          // 낙관적 업데이트를 위해 기존 방식 유지
+          setComments((prev) => ({
+            ...prev,
+            [postId]: prev[postId].filter((comment) => comment.id !== id),
+          }))
+        },
+        onError: (error) => {
+          console.error("댓글 삭제 오류:", error)
+        },
       },
-      onError: (error) => {
-        console.error("댓글 삭제 오류:", error);
-      }
-    }
-  );
+    )
+  }
 
   // 표시할 게시물 결정 로직 추가
   const postsToDisplay = searchQuery
@@ -293,7 +294,7 @@ const PostsManager = () => {
       console.error("댓글 가져오기 오류:", error)
     }
   }
-    
+
   // 게시물 상세 보기
   const openPostDetail = (post) => {
     setSelectedPost(post)
@@ -689,17 +690,17 @@ const PostsManager = () => {
                 <strong>나이:</strong> {userData?.age || selectedUser?.age}
               </p>
               <p>
-                <strong>이메일:</strong> {selectedUser?.email}
+                <strong>이메일:</strong> {userData?.email}
               </p>
               <p>
-                <strong>전화번호:</strong> {selectedUser?.phone}
+                <strong>전화번호:</strong> {userData?.phone}
               </p>
               <p>
-                <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-                {selectedUser?.address?.state}
+                <strong>주소:</strong> {userData?.address?.address}, {userData?.address?.city},{" "}
+                {userData?.address?.state}
               </p>
               <p>
-                <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
+                <strong>직장:</strong> {userData?.company?.name} - {userData?.company?.title}
               </p>
             </div>
           </div>
