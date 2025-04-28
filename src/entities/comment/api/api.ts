@@ -21,3 +21,17 @@ export const likeComment = async ({ id, likes }) => {
 
   return response.json()
 }
+
+export const addComment = async (commentData) => {
+  const response = await fetch("/api/comments/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(commentData),
+  })
+
+  if (!response.ok) {
+    throw new Error("댓글 추가 실패")
+  }
+
+  return response.json()
+}

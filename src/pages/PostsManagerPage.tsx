@@ -33,7 +33,7 @@ import {
   useSearchPosts,
   useUpdatePost,
 } from "../features/post-management/api/api"
-import { useCommentsByPostId, useLikeComment } from "../features/comment-management/api/api"
+import { useAddComment, useCommentsByPostId, useLikeComment } from "../features/comment-management/api/api"
 import { useUserById } from "../features/user-management/api/api"
 
 const PostsManager = () => {
@@ -80,6 +80,7 @@ const PostsManager = () => {
   })
 
   const likeCommentMutation = useLikeComment()
+  const addCommentMutation = useAddComment()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -147,6 +148,23 @@ const PostsManager = () => {
         },
       },
     )
+  }
+
+  const handleAddComment = () => {
+    addCommentMutation.mutate(newComment, {
+      onSuccess: (data) => {
+        setComments((prev) => ({
+          ...prev,
+          [data.postId]: [...(prev[data.postId] || []), data],
+        }))
+
+        setShowAddCommentDialog(false)
+        setNewComment({ body: "", postId: null, userId: 1 })
+      },
+      onError: (error) => {
+        console.error("댓글 추가 오류:", error)
+      },
+    })
   }
 
   // 표시할 게시물 결정 로직 추가
@@ -640,7 +658,7 @@ const PostsManager = () => {
               value={newComment.body}
               onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
             />
-            <Button onClick={addComment}>댓글 추가</Button>
+            <Button onClick={handleAddComment}>댓글 추가</Button>
           </div>
         </DialogContent>
       </Dialog>
