@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { getPostsList, searchPosts } from "../../../entities/post/api/api"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { getPostsList, searchPosts, updatePost } from "../../../entities/post/api/api"
 import { getUsersList } from "../../../entities/user/api/api"
 
 export const usePostsWithUsers = ({ limit, skip }) => {
@@ -49,5 +49,17 @@ export const useSearchPosts = (query) => {
     queryKey: ["posts", "search", query],
     queryFn: () => searchPosts(query),
     enabled,
+  })
+}
+
+export const useUpdatePost = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (postData) => updatePost(postData),
+    onSuccess: () => {
+      // 성공 시 posts 관련 쿼리 무효화
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
+    },
   })
 }

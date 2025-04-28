@@ -26,7 +26,7 @@ import {
   Textarea,
 } from "../shared/ui"
 import { useTagsList } from "../entities/tag/model/model"
-import { usePostsWithUsers, useSearchPosts } from "../features/post-management/api/api"
+import { usePostsWithUsers, useSearchPosts, useUpdatePost } from "../features/post-management/api/api"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -59,6 +59,7 @@ const PostsManager = () => {
   const { data: tags, isLoading: tagsLoading, error: tagsError } = useTagsList()
   // const { posts, total, isLoading } = usePostsWithUsers({ limit, skip });
   const { data: searchResult, isLoading: searchLoading, isError: searchError } = useSearchPosts(searchQuery)
+  const updatePostMutation = useUpdatePost()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -74,6 +75,17 @@ const PostsManager = () => {
 
   const handleSearch = () => {
     updateURL()
+  }
+
+  const handleUpdatePost = () => {
+    updatePostMutation.mutate(selectedPost, {
+      onSuccess: () => {
+        setShowEditDialog(false)
+      },
+      onError: (error) => {
+        console.error("게시물 업데이트 오류:", error)
+      },
+    })
   }
 
   // 표시할 게시물 결정 로직 추가
@@ -157,22 +169,6 @@ const PostsManager = () => {
       setNewPost({ title: "", body: "", userId: 1 })
     } catch (error) {
       console.error("게시물 추가 오류:", error)
-    }
-  }
-
-  // 게시물 업데이트
-  const updatePost = async () => {
-    try {
-      const response = await fetch(`/api/posts/${selectedPost.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedPost),
-      })
-      const data = await response.json()
-      setPosts(posts.map((post) => (post.id === data.id ? data : post)))
-      setShowEditDialog(false)
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error)
     }
   }
 
@@ -602,7 +598,7 @@ const PostsManager = () => {
               value={selectedPost?.body || ""}
               onChange={(e) => setSelectedPost({ ...selectedPost, body: e.target.value })}
             />
-            <Button onClick={updatePost}>게시물 업데이트</Button>
+            <Button onClick={handleUpdatePost}>게시물 업데이트</Button>
           </div>
         </DialogContent>
       </Dialog>

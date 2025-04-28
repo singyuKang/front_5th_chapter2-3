@@ -15,3 +15,17 @@ export const searchPosts = async (query) => {
   }
   return response.json()
 }
+
+export const updatePost = async (postData) => {
+  const response = await fetch(`/api/posts/${postData.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(postData),
+  })
+
+  if (!response.ok) {
+    throw new Error("게시물 업데이트 실패")
+  }
+
+  return response.json()
+}
