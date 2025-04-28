@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { deletePost, getPostsList, searchPosts, updatePost } from "../../../entities/post/api/api"
+import { addPost, deletePost, getPostsList, searchPosts, updatePost } from "../../../entities/post/api/api"
 import { getUsersList } from "../../../entities/user/api/api"
 
 export const usePostsWithUsers = ({ limit, skip }) => {
@@ -58,7 +58,6 @@ export const useUpdatePost = () => {
   return useMutation({
     mutationFn: (postData) => updatePost(postData),
     onSuccess: () => {
-      // 성공 시 posts 관련 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: ["posts"] })
     },
   })
@@ -70,7 +69,17 @@ export const useDeletePost = () => {
   return useMutation({
     mutationFn: (id) => deletePost(id),
     onSuccess: () => {
-      // 성공 시 posts 관련 쿼리 무효화
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
+    },
+  })
+}
+
+export const useAddPost = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (newPost) => addPost(newPost),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
     },
   })

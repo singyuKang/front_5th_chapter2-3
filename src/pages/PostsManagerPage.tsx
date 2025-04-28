@@ -26,7 +26,13 @@ import {
   Textarea,
 } from "../shared/ui"
 import { useTagsList } from "../entities/tag/model/model"
-import { useDeletePost, usePostsWithUsers, useSearchPosts, useUpdatePost } from "../features/post-management/api/api"
+import {
+  useAddPost,
+  useDeletePost,
+  usePostsWithUsers,
+  useSearchPosts,
+  useUpdatePost,
+} from "../features/post-management/api/api"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -61,6 +67,7 @@ const PostsManager = () => {
   const { data: searchResult, isLoading: searchLoading, isError: searchError } = useSearchPosts(searchQuery)
   const updatePostMutation = useUpdatePost()
   const deletePostMutation = useDeletePost()
+  const addPostMutation = useAddPost()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -93,6 +100,20 @@ const PostsManager = () => {
     deletePostMutation.mutate(id, {
       onError: (error) => {
         console.error("게시물 삭제 오류:", error)
+      },
+    })
+  }
+
+  const handleAddPost = () => {
+    // {id: 252, title: 'x', body: 'xxx', userId: 1}
+    addPostMutation.mutate(newPost, {
+      onSuccess: (responseData) => {
+        setPosts([responseData, ...posts])
+        setShowAddDialog(false)
+        setNewPost({ title: "", body: "", userId: 1 })
+      },
+      onError: (error) => {
+        console.error("게시물 추가 오류:", error)
       },
     })
   }
@@ -162,23 +183,6 @@ const PostsManager = () => {
       console.error("태그별 게시물 가져오기 오류:", error)
     }
     setLoading(false)
-  }
-
-  // 게시물 추가
-  const addPost = async () => {
-    try {
-      const response = await fetch("/api/posts/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newPost),
-      })
-      const data = await response.json()
-      setPosts([data, ...posts])
-      setShowAddDialog(false)
-      setNewPost({ title: "", body: "", userId: 1 })
-    } catch (error) {
-      console.error("게시물 추가 오류:", error)
-    }
   }
 
   // 댓글 가져오기
@@ -572,7 +576,7 @@ const PostsManager = () => {
               value={newPost.userId}
               onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
             />
-            <Button onClick={addPost}>게시물 추가</Button>
+            <Button onClick={handleAddPost}>게시물 추가</Button>
           </div>
         </DialogContent>
       </Dialog>

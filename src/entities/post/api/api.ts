@@ -41,3 +41,17 @@ export const deletePost = async (id) => {
 
   return response.json()
 }
+
+export const addPost = async (postData) => {
+  const response = await fetch("/api/posts/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(postData),
+  })
+
+  if (!response.ok) {
+    throw new Error("게시물 추가 실패")
+  }
+
+  return response.json()
+}
