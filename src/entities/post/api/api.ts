@@ -6,6 +6,16 @@ export const getPostsList = async ({ limit, skip }) => {
   return response.json()
 }
 
+export const getPostsByTag = async (tag) => {
+  if (!tag || tag === "all") return null
+
+  const response = await fetch(`/api/posts/tag/${tag}`)
+  if (!response.ok) {
+    throw new Error("태그별 게시물 가져오기 실패")
+  }
+  return response.json()
+}
+
 export const searchPosts = async (query) => {
   if (!query) return null
 
