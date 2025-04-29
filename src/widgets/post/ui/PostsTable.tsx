@@ -10,7 +10,6 @@ interface PostsTableProps {
   posts: any[]
   searchQuery: string
   selectedTag: string
-  openPostDetail: (post: any) => void
   setSelectedPost: (post: any) => void
   setShowEditDialog: (show: boolean) => void
   handleDeletePost: (id: number) => void
@@ -24,7 +23,6 @@ export const PostsTable: React.FC<PostsTableProps> = ({
   posts,
   searchQuery,
   selectedTag,
-  openPostDetail,
   setSelectedPost,
   setShowEditDialog,
   handleDeletePost,

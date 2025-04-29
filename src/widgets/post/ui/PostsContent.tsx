@@ -21,7 +21,6 @@ interface PostsContentProps {
 
   // 테이블 관련 props
   posts: any[]
-  openPostDetail: (post: any) => void
   setSelectedPost: (post: any) => void
   setShowEditDialog: (show: boolean) => void
   handleDeletePost: (id: number) => void
@@ -55,7 +54,6 @@ export const PostsContent: React.FC<PostsContentProps> = (props) => {
     sortOrder,
     setSortOrder,
     tags,
-    openPostDetail,
     setSelectedPost,
     setShowEditDialog,
     handleDeletePost,
@@ -95,7 +93,6 @@ export const PostsContent: React.FC<PostsContentProps> = (props) => {
             posts={posts}
             searchQuery={searchQuery}
             selectedTag={selectedTag}
-            openPostDetail={openPostDetail}
             setSelectedPost={setSelectedPost}
             setShowEditDialog={setShowEditDialog}
             handleDeletePost={handleDeletePost}

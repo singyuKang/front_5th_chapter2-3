@@ -5,14 +5,17 @@ import {
   getCommentsByPostId,
   likeComment,
   updateComment,
-} from "../../../entities/comment/api/api"
+} from "../../../entities/comment/api/api.ts"
 
-export const useCommentsByPostId = (postId) => {
-  return useQuery({
-    queryKey: ["comments", postId],
+export const useCommentsByPostId = (postId: number) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["comment"],
     queryFn: () => getCommentsByPostId(postId),
-    enabled: !!postId,
   })
+
+  if (isLoading) return { data: null, comments: null, isLoading: true, error }
+
+  return { data, comments: data ?? [], isLoading: false, error: null }
 }
 
 export const useLikeComment = () => {

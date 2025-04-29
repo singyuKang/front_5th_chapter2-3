@@ -18,7 +18,7 @@ export const ShowPostDetailModal: React.FC = () => {
         </DialogHeader>
         <div className="space-y-4 w-full max-w-md">
           {/* <p>{highlightText(selectedPost?.body, searchQuery)}</p> */}
-          {/* <CommentInfo postId={selectedPost?.id} searchQuery={searchQuery} /> */}
+          {/* <CommentInfoBox postId={selectedPost?.id} searchQuery={searchQuery} /> */}
         </div>
       </DialogContent>
     </Dialog>

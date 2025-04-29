@@ -282,11 +282,12 @@ const PostsManager = () => {
   }
 
   // 게시물 상세 보기
-  const openPostDetail = (post) => {
-    setSelectedPost(post)
-    fetchComments(post.id)
-    setShowPostDetailDialog(true)
-  }
+  // const openPostDetail = (post) => {
+  //   setSelectedPost(post)
+  //   fetchComments(post.id)
+  //   setShowPostDetailDialog(true)
+  // }
+
   useEffect(() => {
     if (selectedTag) {
       fetchPostsByTag(selectedTag)
@@ -390,7 +391,6 @@ const PostsManager = () => {
         tags={tags || []}
         // 테이블 관련 props
         posts={postsToDisplay || []}
-        openPostDetail={openPostDetail}
         setSelectedPost={setSelectedPost}
         setShowEditDialog={setShowEditDialog}
         handleDeletePost={handleDeletePost}
