@@ -1,4 +1,6 @@
+import { SearchParams } from "@features/filter-management/model/types"
 import { Post, PostForm, PostResponse } from "../model/type"
+import { buildURLPath } from "@features/filter-management/utils/buildURLPath"
 
 export const getPostsList = async ({ limit, skip }: { limit: number; skip: number }): Promise<PostResponse | null> => {
   const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)
@@ -75,5 +77,20 @@ export const addPost = async (newPost: PostForm): Promise<Post> => {
   } catch (error) {
     console.error("게시물 추가 오류:", error)
     throw new Error(`게시물 추가 오류: ${error}`)
+  }
+}
+
+export const readPostApi = async (params: SearchParams): Promise<PostResponse> => {
+  try {
+    const queryString = buildURLPath({ ...params })
+    const response = await fetch(`/api/posts${queryString}`)
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`)
+    }
+
+    return await response.json()
+  } catch (error) {
+    throw new Error(`게시물 Read 오류 ${error}`)
   }
 }

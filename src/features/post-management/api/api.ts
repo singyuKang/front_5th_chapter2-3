@@ -4,10 +4,13 @@ import {
   deletePost,
   getPostsByTag,
   getPostsList,
+  readPostApi,
   searchPosts,
   updatePost,
 } from "../../../entities/post/api/api"
 import { getUsersList } from "../../../entities/user/api/api"
+import { useSearchParams } from "@features/filter-management/model/useSearchParams"
+import { PostResponse } from "@entities/post/model/type"
 
 export const usePostsWithUsers = ({ limit, skip }) => {
   // 게시물 쿼리
@@ -132,4 +135,27 @@ export const useAddPost = () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
     },
   })
+}
+
+const DEFAULT_QUERY_RESULT: PostResponse = {
+  posts: [],
+  total: 0,
+  skip: 0,
+  limit: 0,
+}
+
+export const useQueryPostList = () => {
+  const searchParams = useSearchParams((state) => state.searchParams)
+
+  const { data, isLoading, error } = useQuery<PostResponse>({
+    queryKey: ["posts", searchParams],
+    queryFn: () => readPostApi(searchParams),
+    initialData: DEFAULT_QUERY_RESULT,
+  })
+
+  return {
+    posts: data,
+    isLoading,
+    error,
+  }
 }

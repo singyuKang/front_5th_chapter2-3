@@ -7,7 +7,7 @@ import { useSelectedPostHook } from "../model/useSelectedPost"
 export const ShowPostDetailModal: React.FC = () => {
   const { openDetailPost, closeModal } = useModal()
   const { selectedPost } = useSelectedPostHook()
-  console.log("🚀 ~ selectedPost:", selectedPost)
+  // console.log("🚀 ~ selectedPost:", selectedPost)
 
   return (
     <Dialog open={openDetailPost} onOpenChange={() => closeModal("detailPost")}>
