@@ -25,7 +25,6 @@ interface PostsContentProps {
   setShowEditDialog: (show: boolean) => void
   handleDeletePost: (id: number) => void
   handleOpenUserModal: (user: any) => void
-  highlightText: (text: string, highlight: string) => React.ReactNode
 
   // 페이지네이션 관련 props
   skip: number
@@ -58,7 +57,6 @@ export const PostsContent: React.FC<PostsContentProps> = (props) => {
     setShowEditDialog,
     handleDeletePost,
     handleOpenUserModal,
-    highlightText,
     skip,
     setSkip,
     limit,
@@ -99,7 +97,6 @@ export const PostsContent: React.FC<PostsContentProps> = (props) => {
             handleOpenUserModal={handleOpenUserModal}
             updateURL={updateURL}
             setSelectedTag={setSelectedTag}
-            highlightText={highlightText}
           />
         )}
 

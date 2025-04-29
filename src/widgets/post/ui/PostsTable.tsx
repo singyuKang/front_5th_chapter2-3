@@ -5,6 +5,7 @@ import { ThumbsUp, ThumbsDown, MessageSquare, Edit2, Trash2 } from "lucide-react
 import { useSelectedPostHook } from "@features/post-management/model/useSelectedPost"
 import { useModal } from "@features/modal/hooks/useModal"
 import { Post } from "@entities/post/model/type"
+import { highlightText } from "@shared/utils/highlightText"
 
 interface PostsTableProps {
   posts: any[]
@@ -16,7 +17,6 @@ interface PostsTableProps {
   handleOpenUserModal: (user: any) => void
   updateURL: () => void
   setSelectedTag: (tag: string) => void
-  highlightText: (text: string, highlight: string) => React.ReactNode
 }
 
 export const PostsTable: React.FC<PostsTableProps> = ({
@@ -29,7 +29,6 @@ export const PostsTable: React.FC<PostsTableProps> = ({
   handleOpenUserModal,
   updateURL,
   setSelectedTag,
-  highlightText,
 }) => {
   const { updateSelectedPost } = useSelectedPostHook()
   const { openModal } = useModal()
