@@ -42,6 +42,7 @@ import {
 } from "../features/comment-management/api/api"
 import { useUserById } from "../features/user-management/api/api"
 import { PostsHeader } from "@widgets/post/ui"
+import { PostsTableContainer } from "@widgets/post/ui/PostsTableContainer"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -471,7 +472,7 @@ const PostsManager = () => {
   }
 
   return (
-    <Card className="w-full max-w-6xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto">
       <PostsHeader
         onAddClick={() => {
           setShowAddDialog(true)
@@ -565,6 +566,8 @@ const PostsManager = () => {
           </div>
         </div>
       </CardContent>
+
+      {/* <PostsTableContainer /> */}
 
       {/* 게시물 추가 대화상자 */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
@@ -703,7 +706,7 @@ const PostsManager = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </Card>
+    </div>
   )
 }
 
