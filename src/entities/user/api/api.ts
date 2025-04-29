@@ -8,12 +8,16 @@ export const getUsersList = async ({ limit = 0, select = "username,image" }) => 
   return response.json()
 }
 
-export const getUserById = async (userId: number): Promise<User | null> => {
-  if (!userId) return null
-
-  const response = await fetch(`/api/users/${userId}`)
-  if (!response.ok) {
-    throw new Error("사용자 정보 가져오기 실패")
+export const getUserById = async (userId: number): Promise<User> => {
+  try {
+    const response = await fetch(`/api/users/${userId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error("사용자 조회 오류:", error)
+    throw new Error(`사용자 조회 오류: ${error}`)
   }
-  return response.json()
 }

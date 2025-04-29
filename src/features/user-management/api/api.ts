@@ -3,6 +3,7 @@ import { getUserById } from "../../../entities/user/api/api"
 import { useEffect } from "react"
 import { User, UserList } from "@entities/user/model/types"
 import { userCache } from "@entities/user/lib"
+import { authorValue } from "../config/autherValue"
 
 export const useUserById = (userId, options = {}) => {
   return useQuery({
@@ -51,4 +52,22 @@ export const useUserCache = () => {
   }
 
   return { userData: [...userCache.users.values()], fetchUsers, getUser }
+}
+
+export const useQueryPostAuthor = (userId: number) => {
+  const { data: author } = useQuery<User>({
+    queryKey: ["author", userId],
+    queryFn: async () => {
+      if (userCache.hasUser(userId)) {
+        return userCache.getUser(userId) as User
+      } else {
+        const userData = await getUserById(userId)
+        userCache.updateUser(userData)
+        return userData
+      }
+    },
+    initialData: authorValue.initial,
+  })
+
+  return { author }
 }

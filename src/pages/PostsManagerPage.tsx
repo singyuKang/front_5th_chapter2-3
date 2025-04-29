@@ -39,6 +39,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dia
 import { Input } from "@shared/ui/input/Input"
 import { useSearchParams } from "@features/filter-management/model/useSearchParams"
 import { highlightText } from "@shared/utils/highlightText"
+import { UserDetailModal } from "@features/user-management/ui/UserDetailModal"
+import { useModal } from "@features/modal/hooks/useModal"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -75,19 +77,12 @@ const PostsManager = () => {
   const deletePostMutation = useDeletePost()
   const addPostMutation = useAddPost()
   const { data: commentsData, isLoading: commentsLoading } = useCommentsByPostId(selectedPost?.id)
-  const {
-    data: userData,
-    isLoading: userDataLoading,
-    error: userDataError,
-  } = useUserById(selectedUser?.id, {
-    enabled: !!selectedUser?.id && showUserModal,
-  })
-  // console.log("🚀 ~ PostsManager ~ userData:", userData)
-
   const likeCommentMutation = useLikeComment()
   const addCommentMutation = useAddComment()
   const updateCommentMutation = useUpdateComment()
   const deleteCommentMutation = useDeleteComment()
+
+  const { openModal } = useModal()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -368,7 +363,10 @@ const PostsManager = () => {
             <TableCell>
               <div
                 className="flex items-center space-x-2 cursor-pointer"
-                onClick={() => handleOpenUserModal(post.author)}
+                onClick={() => {
+                  // handleOpenUserModal(post.author)
+                  openModal("detailUser")
+                }}
               >
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
@@ -657,7 +655,7 @@ const PostsManager = () => {
       </Dialog>
 
       {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
+      {/* <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>사용자 정보</DialogTitle>
@@ -693,7 +691,8 @@ const PostsManager = () => {
             </div>
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
+      <UserDetailModal />
     </div>
   )
 }

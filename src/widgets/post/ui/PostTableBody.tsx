@@ -1,5 +1,8 @@
 import { useQueryPostList } from "@features/post-management/api/api"
 import { usePostModals } from "@features/post-management/hooks/usePostModal"
+import { PostTitleInfoTableCell } from "@features/post-management/ui/PostTitleInfoTableCell"
+import { PostUserInfoTableCell } from "@features/post-management/ui/PostUserInfoTableCell"
+import { TableCell } from "@shared/ui/table/TableCell"
 
 export const PostsTableBody = () => {
   const { posts } = useQueryPostList()
@@ -14,9 +17,9 @@ export const PostsTableBody = () => {
     <tbody className="border-t">
       {posts.posts.map((post, index) => (
         <tr key={`${index}th-${post.id}-post-row`}>
-          {/* <TableCell>{post.id.toString()}</TableCell> */}
-          {/* <PostTitleInfoTableCell title={post.title} tags={post.tags} /> */}
-          {/* <PostUserInfoTableCell userId={post.userId} openUserModal={openUserModal} /> */}
+          <TableCell>{post.id.toString()}</TableCell>
+          <PostTitleInfoTableCell title={post.title} tags={post.tags} />
+          <PostUserInfoTableCell userId={post.userId} openUserModal={openUserModal} />
           {/* <PostLikeInfoTableCell reactions={post.reactions} /> */}
           {/* <PostReactInfoTableCell post={post} openEditModal={openEditModal} openPostDetail={openDetailModal} /> */}
         </tr>
