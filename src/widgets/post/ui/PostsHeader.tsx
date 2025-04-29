@@ -1,21 +1,20 @@
-import { Button, CardHeader, CardTitle } from "@shared/ui"
+import { Button } from "@shared/ui"
 import { Plus } from "lucide-react"
 
 interface PostsHeaderProps {
   onAddClick: () => void
-  title?: string
 }
 
-export const PostsHeader: React.FC<PostsHeaderProps> = ({ onAddClick, title = "게시물 관리자" }) => {
+export const PostsHeader: React.FC<PostsHeaderProps> = ({ onAddClick }) => {
   return (
-    <CardHeader>
-      <CardTitle className="flex items-center justify-between">
-        <span>{title}</span>
+    <div className="flex flex-col space-y-1.5 p-6">
+      <div className="flex items-center justify-between text-2xl font-semibold leading-none tracking-tight">
+        <span>게시물 관리자</span>;
         <Button onClick={onAddClick}>
           <Plus className="w-4 h-4 mr-2" />
           게시물 추가
         </Button>
-      </CardTitle>
-    </CardHeader>
+      </div>
+    </div>
   )
 }
