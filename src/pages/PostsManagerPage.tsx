@@ -41,6 +41,7 @@ import { UserDetailModal } from "@features/user-management/ui/UserDetailModal"
 import { useSelectedUserHook } from "@features/user-management/model/useSelectedUser"
 import { useModal } from "@features/modal/hooks/useModal"
 import { usePostModals } from "@features/post-management/hooks/usePostModal"
+import { ShowPostDetailModal } from "@features/post-management/ui/ShowPostDetailModal"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -67,25 +68,14 @@ const PostsManager = () => {
   const [showAddCommentDialog, setShowAddCommentDialog] = useState(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState(false)
-  const [showUserModal, setShowUserModal] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
 
-  const { data: tags, isLoading: tagsLoading, error: tagsError } = useTagsList()
+  const { data: tags } = useTagsList()
   // const { posts, total, isLoading } = usePostsWithUsers({ limit, skip });
-  const { data: searchResult, isLoading: searchLoading, isError: searchError } = useSearchPosts(searchQuery)
+  const { data: searchResult, isLoading: searchLoading } = useSearchPosts(searchQuery)
   const updatePostMutation = useUpdatePost()
   const deletePostMutation = useDeletePost()
   const addPostMutation = useAddPost()
-  const { data: commentsData, isLoading: commentsLoading } = useCommentsByPostId(selectedPost?.id)
-  const {
-    data: userData,
-    isLoading: userDataLoading,
-    error: userDataError,
-  } = useUserById(selectedUser?.id, {
-    enabled: !!selectedUser?.id && showUserModal,
-  })
-  console.log("🚀 ~ PostsManager ~ userData:", userData)
-  console.log("🚀 ~ PostsManager ~ selectedUser:", selectedUser)
+  const { data: commentsData } = useCommentsByPostId(selectedPost?.id)
 
   const { openUserModal } = usePostModals()
 
@@ -138,12 +128,6 @@ const PostsManager = () => {
     })
   }
 
-  const handleOpenUserModal = async (user) => {
-    // setSelectedUser(user) // 기본 정보로 먼저 설정
-    // setShowUserModal(true) // 모달 표시
-    updateSelectedUser(userData)
-    openModal("detailUser")
-  }
   // 표시할 게시물 결정 로직 추가
   const postsToDisplay = searchQuery
     ? searchResult?.posts || [] // 검색어가 있으면 검색 결과 사용
@@ -356,7 +340,7 @@ const PostsManager = () => {
           </Button>
         </div>
         <div className="space-y-1">
-          {commentsToShow[postId]?.map((comment) => (
+          {commentsToShow.map((comment) => (
             <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
               <div className="flex items-center space-x-2 overflow-hidden">
                 <span className="font-medium truncate">{comment.user.username}:</span>
@@ -508,19 +492,7 @@ const PostsManager = () => {
         </DialogContent>
       </Dialog>
 
-      {/* 게시물 상세 보기 대화상자 */}
-      <Dialog open={showPostDetailDialog} onOpenChange={setShowPostDetailDialog}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>{highlightText(selectedPost?.title, searchQuery)}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {renderComments(selectedPost?.id)}
-          </div>
-        </DialogContent>
-      </Dialog>
-
+      <ShowPostDetailModal />
       <UserDetailModal />
     </Card>
   )

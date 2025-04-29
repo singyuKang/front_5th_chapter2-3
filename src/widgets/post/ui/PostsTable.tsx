@@ -2,6 +2,9 @@ import React from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui"
 import { Button } from "@shared/ui"
 import { ThumbsUp, ThumbsDown, MessageSquare, Edit2, Trash2 } from "lucide-react"
+import { useSelectedPostHook } from "@features/post-management/model/useSelectedPost"
+import { useModal } from "@features/modal/hooks/useModal"
+import { Post } from "@entities/post/model/type"
 
 interface PostsTableProps {
   posts: any[]
@@ -30,6 +33,14 @@ export const PostsTable: React.FC<PostsTableProps> = ({
   setSelectedTag,
   highlightText,
 }) => {
+  const { updateSelectedPost } = useSelectedPostHook()
+  const { openModal } = useModal()
+
+  const handleOpenPostDetail = (post: Post) => {
+    updateSelectedPost(post)
+    openModal("detailPost")
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -88,7 +99,7 @@ export const PostsTable: React.FC<PostsTableProps> = ({
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
+                <Button variant="ghost" size="sm" onClick={() => handleOpenPostDetail(post)}>
                   <MessageSquare className="w-4 h-4" />
                 </Button>
                 <Button
