@@ -1,7 +1,7 @@
 import { useModal } from "@features/modal/hooks/useModal"
 import { useSelectedUserHook } from "../model/useSelectedUser"
 import { UserInfoText } from "@entities/user/ui/UserInfoText"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { useUserById } from "../api/api"
 
 export const UserDetailModal: React.FC = () => {
