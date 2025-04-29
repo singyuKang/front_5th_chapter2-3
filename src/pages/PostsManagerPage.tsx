@@ -3,26 +3,13 @@ import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from
 import { useLocation, useNavigate } from "react-router-dom"
 import {
   Button,
-  Card,
   CardContent,
-  CardHeader,
-  CardTitle,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
   Input,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
   Textarea,
 } from "../shared/ui"
 import { useTagsList } from "../entities/tag/model/model"
@@ -43,6 +30,13 @@ import {
 import { useUserById } from "../features/user-management/api/api"
 import { PostsHeader } from "@widgets/post/ui"
 import { PostsTableContainer } from "@widgets/post/ui/PostsTableContainer"
+import { Table } from "@shared/ui/table/Table"
+import { TableHeader } from "@shared/ui/table/TableHeader"
+import { TableRow } from "@shared/ui/table/TableRow"
+import { TableHead } from "@shared/ui/table/TableHead"
+import { TableBody } from "@shared/ui/table/TableBody"
+import { TableCell } from "@shared/ui/table/TableCell"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 
 const PostsManager = () => {
   const navigate = useNavigate()
