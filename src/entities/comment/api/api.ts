@@ -1,3 +1,5 @@
+import { NewComment } from "../model/types"
+
 export const getCommentsByPostId = async (postId) => {
   if (!postId) return null
 
@@ -22,7 +24,7 @@ export const likeComment = async ({ id, likes }) => {
   return response.json()
 }
 
-export const addComment = async (commentData) => {
+export const addComment = async (commentData: NewComment) => {
   const response = await fetch("/api/comments/add", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

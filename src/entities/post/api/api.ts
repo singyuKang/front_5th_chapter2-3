@@ -1,4 +1,6 @@
-export const getPostsList = async ({ limit, skip }) => {
+import { Post, PostForm, PostResponse } from "../model/type"
+
+export const getPostsList = async ({ limit, skip }: { limit: number; skip: number }): Promise<PostResponse | null> => {
   const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)
   if (!response.ok) {
     throw new Error("게시물 가져오기 실패")
@@ -6,7 +8,7 @@ export const getPostsList = async ({ limit, skip }) => {
   return response.json()
 }
 
-export const getPostsByTag = async (tag) => {
+export const getPostsByTag = async (tag: string): Promise<PostResponse | null> => {
   if (!tag || tag === "all") return null
 
   const response = await fetch(`/api/posts/tag/${tag}`)
@@ -16,52 +18,62 @@ export const getPostsByTag = async (tag) => {
   return response.json()
 }
 
-export const searchPosts = async (query) => {
+export const searchPosts = async (query: string): Promise<PostResponse | null> => {
+  // 빈 쿼리인 경우 기본 응답 반환
   if (!query) return null
 
-  const response = await fetch(`/api/posts/search?q=${query}`)
-  if (!response.ok) {
-    throw new Error("게시물 검색 실패")
+  try {
+    const response = await fetch(`/api/posts/search?q=${encodeURIComponent(query)}`)
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      throw new Error(`게시물 검색 실패: ${response.status} ${errorText}`)
+    }
+
+    const data: PostResponse = await response.json()
+    return data
+  } catch (error) {
+    console.error("검색 중 오류 발생:", error)
+    throw new Error(`게시물 검색 중 오류 발생: ${error instanceof Error ? error.message : "알 수 없는 오류"}`)
   }
-  return response.json()
 }
 
-export const updatePost = async (postData) => {
-  const response = await fetch(`/api/posts/${postData.id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(postData),
-  })
-
-  if (!response.ok) {
-    throw new Error("게시물 업데이트 실패")
+export const updatePost = async (selectedPost: Partial<Post>): Promise<Post> => {
+  try {
+    const response = await fetch(`/api/posts/${selectedPost.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(selectedPost),
+    })
+    return (await response.json()) as Post
+  } catch (e) {
+    throw new Error("Failed to update post" + e)
   }
-
-  return response.json()
 }
 
-export const deletePost = async (id) => {
-  const response = await fetch(`/api/posts/${id}`, {
-    method: "DELETE",
-  })
-
-  if (!response.ok) {
-    throw new Error("게시물 삭제 실패")
+export const deletePost = async (id: number): Promise<number> => {
+  try {
+    await fetch(`/api/posts/${id}`, {
+      method: "DELETE",
+    })
+    return id
+  } catch (error) {
+    console.error("게시물 삭제 오류:", error)
+    throw new Error(`게시물 삭제 오류: ${error}`)
   }
-
-  return response.json()
 }
 
-export const addPost = async (postData) => {
-  const response = await fetch("/api/posts/add", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(postData),
-  })
-
-  if (!response.ok) {
-    throw new Error("게시물 추가 실패")
+export const addPost = async (newPost: PostForm): Promise<Post> => {
+  try {
+    const response = await fetch("/api/posts/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newPost),
+    })
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error("게시물 추가 오류:", error)
+    throw new Error(`게시물 추가 오류: ${error}`)
   }
-
-  return response.json()
 }
