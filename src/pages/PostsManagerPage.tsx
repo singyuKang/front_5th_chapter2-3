@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom"
 import {
   Button,
   CardContent,
-  Input,
   Select,
   SelectContent,
   SelectItem,
@@ -37,6 +36,9 @@ import { TableHead } from "@shared/ui/table/TableHead"
 import { TableBody } from "@shared/ui/table/TableBody"
 import { TableCell } from "@shared/ui/table/TableCell"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
+import { Input } from "@shared/ui/input/Input"
+import { useSearchParams } from "@features/filter-management/model/useSearchParams"
+import { highlightText } from "@shared/utils/highlightText"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -98,6 +100,23 @@ const PostsManager = () => {
     if (selectedTag) params.set("tag", selectedTag)
     navigate(`?${params.toString()}`)
   }
+
+  const { setSearchParams } = useSearchParams()
+
+  // URL 변경을 감지하고 searchParams 상태 업데이트
+  useEffect(() => {
+    console.log("URL changed:", location.search)
+    const params = new URLSearchParams(location.search)
+
+    setSearchParams({
+      skip: parseInt(params.get("skip") || "0"),
+      limit: parseInt(params.get("limit") || "10"),
+      searchQuery: params.get("search") || "",
+      sortBy: params.get("sortBy") || "",
+      sortOrder: params.get("sortOrder") || "asc",
+      selectedTag: params.get("tag") || "",
+    })
+  }, [location.search])
 
   const handleSearch = () => {
     updateURL()
@@ -305,31 +324,6 @@ const PostsManager = () => {
     }
     updateURL()
   }, [skip, limit, sortBy, sortOrder, selectedTag])
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    setSkip(parseInt(params.get("skip") || "0"))
-    setLimit(parseInt(params.get("limit") || "10"))
-    setSearchQuery(params.get("search") || "")
-    setSortBy(params.get("sortBy") || "")
-    setSortOrder(params.get("sortOrder") || "asc")
-    setSelectedTag(params.get("tag") || "")
-  }, [location.search])
-
-  // 하이라이트 함수 추가
-  const highlightText = (text: string, highlight: string) => {
-    if (!text) return null
-    if (!highlight.trim()) {
-      return <span>{text}</span>
-    }
-    const regex = new RegExp(`(${highlight})`, "gi")
-    const parts = text.split(regex)
-    return (
-      <span>
-        {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-      </span>
-    )
-  }
 
   // 게시물 테이블 렌더링
   const renderPostTable = () => (

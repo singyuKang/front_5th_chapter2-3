@@ -1,4 +1,6 @@
-import { TableHead, TableHeader, TableRow } from "@shared/ui"
+import { TableHead } from "@shared/ui/table/TableHead"
+import { TableHeader } from "@shared/ui/table/TableHeader"
+import { TableRow } from "@shared/ui/table/TableRow"
 import React from "react"
 
 export const PostsTableHeader: React.FC = () => (

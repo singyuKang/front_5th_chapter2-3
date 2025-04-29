@@ -1,4 +1,5 @@
-import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shared/ui"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shared/ui"
+import { Input } from "@shared/ui/input/Input"
 import { Search } from "lucide-react"
 
 interface PostsFilterProps {

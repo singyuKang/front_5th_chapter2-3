@@ -5,6 +5,8 @@ export const PostsTableBody = () => {
   const { posts } = useQueryPostList()
   const { openUserModal } = usePostModals()
 
+  //   console.log("🚀 ~ PostsTableBody ~ posts:", posts)
+
   //   const hasNotPosts = !posts.posts || posts.posts.length === 0
   //   if (hasNotPosts) return <div className="p-6">로딩 중...</div>
 
