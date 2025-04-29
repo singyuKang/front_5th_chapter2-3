@@ -35,6 +35,7 @@ import {
 } from "../features/post-management/api/api"
 import { useCommentsByPostId } from "../features/comment-management/api/api"
 import { useUserById } from "../features/user-management/api/api"
+import { PostsHeader } from "@widgets/post/ui/PostsHeader.tsx"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -462,15 +463,7 @@ const PostsManager = () => {
 
   return (
     <Card className="w-full max-w-6xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>게시물 관리자</span>
-          <Button onClick={() => setShowAddDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            게시물 추가
-          </Button>
-        </CardTitle>
-      </CardHeader>
+      <PostsHeader onAddClick={() => setShowAddDialog(true)} />
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
