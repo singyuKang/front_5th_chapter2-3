@@ -37,6 +37,10 @@ import { useCommentsByPostId } from "../features/comment-management/api/api"
 import { useUserById } from "../features/user-management/api/api"
 import { PostsHeader } from "@widgets/post/ui/PostsHeader.tsx"
 import PostsContent from "@widgets/post/ui/PostsContent"
+import { UserDetailModal } from "@features/user-management/ui/UserDetailModal"
+import { useSelectedUserHook } from "@features/user-management/model/useSelectedUser"
+import { useModal } from "@features/modal/hooks/useModal"
+import { usePostModals } from "@features/post-management/hooks/usePostModal"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -80,6 +84,10 @@ const PostsManager = () => {
   } = useUserById(selectedUser?.id, {
     enabled: !!selectedUser?.id && showUserModal,
   })
+  console.log("🚀 ~ PostsManager ~ userData:", userData)
+  console.log("🚀 ~ PostsManager ~ selectedUser:", selectedUser)
+
+  const { openUserModal } = usePostModals()
 
   // URL 업데이트 함수
   const updateURL = () => {
@@ -131,10 +139,11 @@ const PostsManager = () => {
   }
 
   const handleOpenUserModal = async (user) => {
-    setSelectedUser(user) // 기본 정보로 먼저 설정
-    setShowUserModal(true) // 모달 표시
+    // setSelectedUser(user) // 기본 정보로 먼저 설정
+    // setShowUserModal(true) // 모달 표시
+    updateSelectedUser(userData)
+    openModal("detailUser")
   }
-
   // 표시할 게시물 결정 로직 추가
   const postsToDisplay = searchQuery
     ? searchResult?.posts || [] // 검색어가 있으면 검색 결과 사용
@@ -401,7 +410,7 @@ const PostsManager = () => {
         setSelectedPost={setSelectedPost}
         setShowEditDialog={setShowEditDialog}
         handleDeletePost={handleDeletePost}
-        handleOpenUserModal={handleOpenUserModal}
+        handleOpenUserModal={openUserModal}
         highlightText={highlightText}
         // 페이지네이션 관련 props
         skip={skip}
@@ -512,44 +521,7 @@ const PostsManager = () => {
         </DialogContent>
       </Dialog>
 
-      {/* 사용자 모달 */}
-      <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>사용자 정보</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <img
-              src={userData?.image || selectedUser?.image}
-              alt={userData?.username || selectedUser?.username}
-              className="w-24 h-24 rounded-full mx-auto"
-            />
-            <h3 className="text-xl font-semibold text-center">{userData?.username || selectedUser?.username}</h3>
-            <div className="space-y-2">
-              <p>
-                <strong>이름:</strong> {userData?.firstName || selectedUser?.firstName}{" "}
-                {userData?.lastName || selectedUser?.lastName}
-              </p>
-              <p>
-                <strong>나이:</strong> {userData?.age || selectedUser?.age}
-              </p>
-              <p>
-                <strong>이메일:</strong> {selectedUser?.email}
-              </p>
-              <p>
-                <strong>전화번호:</strong> {selectedUser?.phone}
-              </p>
-              <p>
-                <strong>주소:</strong> {selectedUser?.address?.address}, {selectedUser?.address?.city},{" "}
-                {selectedUser?.address?.state}
-              </p>
-              <p>
-                <strong>직장:</strong> {selectedUser?.company?.name} - {selectedUser?.company?.title}
-              </p>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <UserDetailModal />
     </Card>
   )
 }

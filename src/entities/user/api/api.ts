@@ -1,3 +1,5 @@
+import { User } from "../model/types"
+
 export const getUsersList = async ({ limit = 0, select = "username,image" }) => {
   const response = await fetch(`/api/users?limit=${limit}&select=${select}`)
   if (!response.ok) {
@@ -6,7 +8,7 @@ export const getUsersList = async ({ limit = 0, select = "username,image" }) => 
   return response.json()
 }
 
-export const getUserById = async (userId) => {
+export const getUserById = async (userId: number): Promise<User | null> => {
   if (!userId) return null
 
   const response = await fetch(`/api/users/${userId}`)
