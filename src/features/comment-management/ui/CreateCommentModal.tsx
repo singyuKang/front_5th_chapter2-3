@@ -2,16 +2,27 @@ import { useModal } from "@features/modal/hooks/useModal"
 import { Button } from "@shared/ui"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { Textarea } from "@shared/ui/textarea/TextArea"
-import { useState } from "react"
+import { useAddComment } from "../api/api"
+import useCommentForm from "../hooks/useCommentForm"
+import { commentFormValue } from "./EditCommentModal"
+import { useSelectedPostHook } from "@features/post-management/model/useSelectedPost"
+import { useEffect } from "react"
 
 const CreateCommentModal = () => {
   const { openCreateComment, closeModal } = useModal()
 
-  const [newComment, setNewComment] = useState({ body: "", postId: null, userId: 1 })
+  const { addComment } = useAddComment()
+  const { commentForm, updateCommentForm, resetCommentForm } = useCommentForm({ ...commentFormValue.form })
+  const { selectedPost } = useSelectedPostHook()
+
+  useEffect(() => {
+    updateCommentForm({ postId: selectedPost.id })
+  }, [selectedPost])
 
   const handleAddComment = () => {
-    // TODO : Add Comment
-    console.log("Add Comment")
+    addComment(commentForm)
+    resetCommentForm()
+    closeModal("createComment")
   }
 
   return (
@@ -23,8 +34,12 @@ const CreateCommentModal = () => {
         <div className="space-y-4">
           <Textarea
             placeholder="댓글 내용"
-            value={newComment.body}
-            onChange={(e) => setNewComment({ ...newComment, body: e.target.value })}
+            value={commentForm.body}
+            onChange={(e) =>
+              updateCommentForm({
+                body: (e.target as HTMLTextAreaElement).value,
+              })
+            }
           />
           <Button onClick={handleAddComment}>댓글 추가</Button>
         </div>

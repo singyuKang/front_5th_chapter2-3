@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dia
 import { Textarea } from "@shared/ui/textarea/TextArea"
 import useCommentForm from "../hooks/useCommentForm"
 
-const commentFormValue = {
+export const commentFormValue = {
   form: {
     userId: 1,
     postId: -1,

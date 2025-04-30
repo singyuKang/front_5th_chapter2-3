@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
-  addComment,
+  addCommentApi,
   deleteComment,
   getCommentsByPostId,
   likeComment,
@@ -40,12 +40,14 @@ export const useLikeComment = () => {
 export const useAddComment = () => {
   const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: addComment,
+  const { mutate: addComment } = useMutation({
+    mutationFn: addCommentApi,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["comments", data.postId] })
     },
   })
+
+  return { addComment }
 }
 
 export const useUpdateComment = () => {
