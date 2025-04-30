@@ -3,6 +3,7 @@ import { useCommentsByPostId } from "../api/api"
 import { highlightText } from "@shared/utils/highlightText"
 import { Button } from "@shared/ui"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
+import { useModal } from "@features/modal/hooks/useModal"
 
 interface PropsType {
   postId: number
@@ -11,6 +12,7 @@ interface PropsType {
 
 export const CommentInfoBox: React.FC<PropsType> = ({ postId, searchQuery }) => {
   const { comments } = useCommentsByPostId(postId)
+  const { openModal } = useModal()
 
   if (!comments) return <></>
 
@@ -21,7 +23,7 @@ export const CommentInfoBox: React.FC<PropsType> = ({ postId, searchQuery }) => 
         <Button
           size="sm"
           onClick={() => {
-            // TODO 댓글 추가 Action
+            openModal("createComment")
           }}
         >
           <Plus className="w-3 h-3 mr-1" />
