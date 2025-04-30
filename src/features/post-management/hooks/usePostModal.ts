@@ -19,8 +19,14 @@ export const usePostModals = () => {
     openModal("detailPost")
   }
 
+  const openEditModal = (post: Post) => {
+    updateSelectedPost(post)
+    openModal("editPost")
+  }
+
   return {
     openUserModal,
     openPostDetailModal,
+    openEditModal,
   }
 }

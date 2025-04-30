@@ -6,7 +6,6 @@ import { PostPagination } from "./PostPagination"
 
 export const PostsTableContainer: React.FC = () => {
   const { posts } = useQueryPostList()
-  console.log("🚀 ~ posts:", posts)
   useUserCache()
 
   return (

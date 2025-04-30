@@ -8,16 +8,12 @@ import { TableCell } from "@shared/ui/table/TableCell"
 
 export const PostsTableBody = () => {
   const { posts } = useQueryPostList()
-  const { openUserModal, openPostDetailModal } = usePostModals()
+  const { openUserModal, openPostDetailModal, openEditModal } = usePostModals()
 
   //   console.log("🚀 ~ PostsTableBody ~ posts:", posts)
 
   //   const hasNotPosts = !posts.posts || posts.posts.length === 0
   //   if (hasNotPosts) return <div className="p-6">로딩 중...</div>
-
-  const tempOpenEditModal = () => {
-    console.log("Open Edit Modal")
-  }
 
   return (
     <tbody className="border-t">
@@ -27,7 +23,7 @@ export const PostsTableBody = () => {
           <PostTitleInfoTableCell title={post.title} tags={post.tags} />
           <PostUserInfoTableCell userId={post.userId} openUserModal={openUserModal} />
           <PostLikeInfoTableCell reactions={post.reactions} />
-          <PostReactInfoTableCell post={post} openEditModal={tempOpenEditModal} openPostDetail={openPostDetailModal} />
+          <PostReactInfoTableCell post={post} openEditModal={openEditModal} openPostDetail={openPostDetailModal} />
         </tr>
       ))}
     </tbody>
