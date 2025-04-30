@@ -9,7 +9,8 @@ type PostUserInfoTablePropsType = {
 
 export const PostUserInfoTableCell: React.FC<PostUserInfoTablePropsType> = ({ userId, openUserModal }) => {
   const { author } = useQueryPostAuthor(userId)
-  //   console.log("🚀 ~ author:", author)
+
+  if (!author.image || !author.username) return <></>
 
   return (
     <TableCell>

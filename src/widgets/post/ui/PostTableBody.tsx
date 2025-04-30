@@ -1,5 +1,7 @@
 import { useQueryPostList } from "@features/post-management/api/api"
 import { usePostModals } from "@features/post-management/hooks/usePostModal"
+import { PostLikeInfoTableCell } from "@features/post-management/ui/PostLikeInfoTableCell"
+import { PostReactInfoTableCell } from "@features/post-management/ui/PostReactInfoTableCell"
 import { PostTitleInfoTableCell } from "@features/post-management/ui/PostTitleInfoTableCell"
 import { PostUserInfoTableCell } from "@features/post-management/ui/PostUserInfoTableCell"
 import { TableCell } from "@shared/ui/table/TableCell"
@@ -13,6 +15,14 @@ export const PostsTableBody = () => {
   //   const hasNotPosts = !posts.posts || posts.posts.length === 0
   //   if (hasNotPosts) return <div className="p-6">로딩 중...</div>
 
+  const tempOpenEditModal = () => {
+    console.log("Open Edit Modal")
+  }
+
+  const tempPostDetailModal = () => {
+    console.log("Open Detail Modal")
+  }
+
   return (
     <tbody className="border-t">
       {posts.posts.map((post, index) => (
@@ -20,8 +30,8 @@ export const PostsTableBody = () => {
           <TableCell>{post.id.toString()}</TableCell>
           <PostTitleInfoTableCell title={post.title} tags={post.tags} />
           <PostUserInfoTableCell userId={post.userId} openUserModal={openUserModal} />
-          {/* <PostLikeInfoTableCell reactions={post.reactions} /> */}
-          {/* <PostReactInfoTableCell post={post} openEditModal={openEditModal} openPostDetail={openDetailModal} /> */}
+          <PostLikeInfoTableCell reactions={post.reactions} />
+          <PostReactInfoTableCell post={post} openEditModal={tempOpenEditModal} openPostDetail={tempPostDetailModal} />
         </tr>
       ))}
     </tbody>

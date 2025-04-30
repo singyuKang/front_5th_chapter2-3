@@ -553,7 +553,7 @@ const PostsManager = () => {
         </div>
       </CardContent>
 
-      {/* <PostsTableContainer /> */}
+      <PostsTableContainer />
 
       {/* 게시물 추가 대화상자 */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
