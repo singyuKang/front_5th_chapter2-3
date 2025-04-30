@@ -7,6 +7,12 @@ export interface Comment {
   postId: number
   user: User
 }
+export interface CommentsResponse {
+  comments: Comment[]
+  total: number
+  skip: number
+  limit: number
+}
 
 export interface NewComment {
   body: string

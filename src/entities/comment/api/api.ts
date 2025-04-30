@@ -1,13 +1,18 @@
-import { Comment, NewComment } from "../model/types"
+import { Comment, CommentsResponse, NewComment } from "../model/types"
 
-export const getCommentsByPostId = async (postId: number): Promise<Comment[]> => {
+export const getCommentsByPostId = async (postId: number): Promise<CommentsResponse> => {
   try {
     const response = await fetch(`/api/comments/post/${postId}`)
-    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`)
+    }
+
+    const data: CommentsResponse = await response.json()
     return data
   } catch (error) {
     console.error("댓글 조회 오류:", error)
-    throw new Error(`댓글 조회 오류: ${error}`)
+    throw new Error(`댓글 조회 오류: ${error instanceof Error ? error.message : "알 수 없는 오류"}`)
   }
 }
 

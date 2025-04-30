@@ -77,7 +77,7 @@ const PostsManager = () => {
   const updatePostMutation = useUpdatePost()
   const deletePostMutation = useDeletePost()
   const addPostMutation = useAddPost()
-  const { data: commentsData, isLoading: commentsLoading } = useCommentsByPostId(selectedPost?.id)
+  // const { data: commentsData, isLoading: commentsLoading } = useCommentsByPostId(selectedPost?.id)
   const likeCommentMutation = useLikeComment()
   const addCommentMutation = useAddComment()
   const updateCommentMutation = useUpdateComment()
@@ -408,55 +408,55 @@ const PostsManager = () => {
   )
 
   // 댓글 렌더링
-  const renderComments = (postId) => {
-    const commentsToShow = (postId === selectedPost?.id && commentsData?.comments) || comments[postId] || []
-    return (
-      <div className="mt-2">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-semibold">댓글</h3>
-          <Button
-            size="sm"
-            onClick={() => {
-              setNewComment((prev) => ({ ...prev, postId }))
-              setShowAddCommentDialog(true)
-            }}
-          >
-            <Plus className="w-3 h-3 mr-1" />
-            댓글 추가
-          </Button>
-        </div>
-        <div className="space-y-1">
-          {commentsToShow.map((comment) => (
-            <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
-              <div className="flex items-center space-x-2 overflow-hidden">
-                <span className="font-medium truncate">{comment.user.username}:</span>
-                <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Button variant="ghost" size="sm" onClick={() => handleLikeComment(comment.id, postId)}>
-                  <ThumbsUp className="w-3 h-3" />
-                  <span className="ml-1 text-xs">{comment.likes}</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedComment(comment)
-                    setShowEditCommentDialog(true)
-                  }}
-                >
-                  <Edit2 className="w-3 h-3" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => handleDeleteComment(comment.id, postId)}>
-                  <Trash2 className="w-3 h-3" />
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
+  // const renderComments = (postId) => {
+  //   const commentsToShow = (postId === selectedPost?.id && commentsData?.comments) || comments[postId] || []
+  //   return (
+  //     <div className="mt-2">
+  //       <div className="flex items-center justify-between mb-2">
+  //         <h3 className="text-sm font-semibold">댓글</h3>
+  //         <Button
+  //           size="sm"
+  //           onClick={() => {
+  //             setNewComment((prev) => ({ ...prev, postId }))
+  //             setShowAddCommentDialog(true)
+  //           }}
+  //         >
+  //           <Plus className="w-3 h-3 mr-1" />
+  //           댓글 추가
+  //         </Button>
+  //       </div>
+  //       <div className="space-y-1">
+  //         {commentsToShow.map((comment) => (
+  //           <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
+  //             <div className="flex items-center space-x-2 overflow-hidden">
+  //               <span className="font-medium truncate">{comment.user.username}:</span>
+  //               <span className="truncate">{highlightText(comment.body, searchQuery)}</span>
+  //             </div>
+  //             <div className="flex items-center space-x-1">
+  //               <Button variant="ghost" size="sm" onClick={() => handleLikeComment(comment.id, postId)}>
+  //                 <ThumbsUp className="w-3 h-3" />
+  //                 <span className="ml-1 text-xs">{comment.likes}</span>
+  //               </Button>
+  //               <Button
+  //                 variant="ghost"
+  //                 size="sm"
+  //                 onClick={() => {
+  //                   setSelectedComment(comment)
+  //                   setShowEditCommentDialog(true)
+  //                 }}
+  //               >
+  //                 <Edit2 className="w-3 h-3" />
+  //               </Button>
+  //               <Button variant="ghost" size="sm" onClick={() => handleDeleteComment(comment.id, postId)}>
+  //                 <Trash2 className="w-3 h-3" />
+  //               </Button>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </div>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="w-full max-w-6xl mx-auto">
@@ -650,7 +650,7 @@ const PostsManager = () => {
           </DialogHeader>
           <div className="space-y-4">
             <p>{highlightText(selectedPost?.body, searchQuery)}</p>
-            {renderComments(selectedPost?.id)}
+            {/* {renderComments(selectedPost?.id)} */}
           </div>
         </DialogContent>
       </Dialog>

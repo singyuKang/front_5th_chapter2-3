@@ -6,16 +6,23 @@ import {
   likeComment,
   updateComment,
 } from "../../../entities/comment/api/api.ts"
+import { CommentsResponse } from "@entities/comment/model/types.ts"
 
-export const useCommentsByPostId = (postId: number) => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["comment"],
-    queryFn: () => getCommentsByPostId(postId),
+export const useCommentsByPostId = (postId?: number) => {
+  const { data, isLoading, error } = useQuery<CommentsResponse>({
+    queryKey: ["comments", postId],
+    queryFn: () => getCommentsByPostId(postId as number),
+    enabled: !!postId,
+    staleTime: 60000,
   })
 
-  if (isLoading) return { data: null, comments: null, isLoading: true, error }
-
-  return { data, comments: data ?? [], isLoading: false, error: null }
+  return {
+    commentsData: data,
+    comments: data?.comments || [],
+    total: data?.total || 0,
+    isLoading,
+    error,
+  }
 }
 
 export const useLikeComment = () => {

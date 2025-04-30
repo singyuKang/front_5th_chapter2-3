@@ -12,6 +12,8 @@ interface PropsType {
 export const CommentInfoBox: React.FC<PropsType> = ({ postId, searchQuery }) => {
   const { comments } = useCommentsByPostId(postId)
 
+  if (!comments) return <></>
+
   return (
     <div className="mt-2">
       <div className="flex items-center justify-between mb-2">
