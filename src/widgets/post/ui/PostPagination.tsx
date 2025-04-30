@@ -9,19 +9,11 @@ interface PostPaginationProps {
 
 export const PostPagination: React.FC<PostPaginationProps> = ({ total }) => {
   const searchParams = useSearchParams((state) => state.searchParams)
-  const { setSearchParams } = useSearchParams()
+  console.log("🚀 ~ searchParams:", searchParams)
+  const { setSearchParams, goNextPage, goPrevPage } = useSearchParams()
   const { limit, skip } = searchParams
-
   const hasNotPrev = skip === 0
   const hasNotNext = skip + limit >= total
-
-  const goPrevPage = () => {
-    console.log("TODO Go Prev Page")
-  }
-
-  const goNextPage = () => {
-    console.log("TODO Go Next Page")
-  }
 
   return (
     <div className="flex justify-between items-center">
