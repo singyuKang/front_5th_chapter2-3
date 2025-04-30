@@ -15,7 +15,7 @@ export const PostSearchFilters: React.FC = () => {
   const [searchValue, setSearchValue] = useState(searchParams.searchQuery)
 
   // 태그 목록 가져오기
-  const { data: tags, isLoading: tagsLoading } = useTagsList()
+  const { data: tags } = useTagsList()
 
   // 검색 파라미터가 변경될 때 로컬 상태 업데이트
   useEffect(() => {
