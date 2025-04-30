@@ -5,11 +5,19 @@ import { Post, PostResponse } from "@entities/post/model/type"
 
 export const useDeletePost = () => {
   const queryClient = useQueryClient()
+  const searchParams = useSearchParams((state) => state.searchParams)
+
+  const deletePostFromCache = (postId: number, oldData: PostResponse) => ({
+    limit: oldData.limit,
+    skip: oldData.skip,
+    posts: (oldData?.posts || []).filter((post) => post.id !== postId),
+    total: oldData?.total ? oldData.total - 1 : 0,
+  })
 
   const { mutate: deletePost } = useMutation({
     mutationFn: (id: number) => deletePostAPi(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] })
+    onSuccess: (postId: number) => {
+      queryClient.setQueryData(["posts", searchParams], (oldData: PostResponse) => deletePostFromCache(postId, oldData))
     },
   })
 
