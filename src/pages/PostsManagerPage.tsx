@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Button, Textarea } from "../shared/ui"
+import { Button } from "../shared/ui"
 import { useTagsList } from "../entities/tag/model/model"
 import {
   useAddPost,
@@ -24,6 +24,7 @@ import { Input } from "@shared/ui/input/Input"
 import { useSearchParams } from "@features/filter-management/model/useSearchParams"
 import { UserDetailModal } from "@features/user-management/ui/UserDetailModal"
 import { PostDetailModal } from "@features/post-management/ui/PostDetailModal"
+import { Textarea } from "@shared/ui/textarea/TextArea"
 
 const PostsManager = () => {
   const navigate = useNavigate()
