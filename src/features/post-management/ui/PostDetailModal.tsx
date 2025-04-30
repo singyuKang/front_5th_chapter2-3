@@ -1,10 +1,9 @@
 import { useModal } from "@features/modal/hooks/useModal"
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { highlightText } from "@shared/utils/highlightText"
 import { useSelectedPostHook } from "../model/useSelectedPost"
 
-export const ShowPostDetailModal: React.FC = () => {
+export const PostDetailModal: React.FC = () => {
   const { openDetailPost, closeModal } = useModal()
   const { selectedPost } = useSelectedPostHook()
   // console.log("🚀 ~ selectedPost:", selectedPost)

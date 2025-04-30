@@ -41,6 +41,7 @@ import { useSearchParams } from "@features/filter-management/model/useSearchPara
 import { highlightText } from "@shared/utils/highlightText"
 import { UserDetailModal } from "@features/user-management/ui/UserDetailModal"
 import { useModal } from "@features/modal/hooks/useModal"
+import { PostDetailModal } from "@features/post-management/ui/PostDetailModal"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -654,6 +655,7 @@ const PostsManager = () => {
         </DialogContent>
       </Dialog>
 
+      <PostDetailModal />
       <UserDetailModal />
     </div>
   )

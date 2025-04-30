@@ -8,7 +8,7 @@ import { TableCell } from "@shared/ui/table/TableCell"
 
 export const PostsTableBody = () => {
   const { posts } = useQueryPostList()
-  const { openUserModal } = usePostModals()
+  const { openUserModal, openPostDetailModal } = usePostModals()
 
   //   console.log("🚀 ~ PostsTableBody ~ posts:", posts)
 
@@ -19,10 +19,6 @@ export const PostsTableBody = () => {
     console.log("Open Edit Modal")
   }
 
-  const tempPostDetailModal = () => {
-    console.log("Open Detail Modal")
-  }
-
   return (
     <tbody className="border-t">
       {posts.posts.map((post, index) => (
@@ -31,7 +27,7 @@ export const PostsTableBody = () => {
           <PostTitleInfoTableCell title={post.title} tags={post.tags} />
           <PostUserInfoTableCell userId={post.userId} openUserModal={openUserModal} />
           <PostLikeInfoTableCell reactions={post.reactions} />
-          <PostReactInfoTableCell post={post} openEditModal={tempOpenEditModal} openPostDetail={tempPostDetailModal} />
+          <PostReactInfoTableCell post={post} openEditModal={tempOpenEditModal} openPostDetail={openPostDetailModal} />
         </tr>
       ))}
     </tbody>
