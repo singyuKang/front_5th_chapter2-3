@@ -4,14 +4,27 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dia
 import { Input } from "@shared/ui/input/Input"
 import { Textarea } from "@shared/ui/textarea/TextArea"
 import { useState } from "react"
+import { useMutationPostCreate } from "../api/api"
+import { PostForm } from "@entities/post/model/type"
 
 const CreatePostModal = () => {
-  const [newPost, setNewPost] = useState({ title: "", body: "", userId: 1 })
+  const postInitialValue = {
+    title: "",
+    body: "",
+    userId: 1,
+  }
+
+  const [newPost, setNewPost] = useState(postInitialValue)
   const { openCreatePost, closeModal } = useModal()
+
+  const { createPost } = useMutationPostCreate()
 
   const handleAddPost = () => {
     // TODO : Handle Add Post
     console.log("Add Post")
+    createPost(newPost as PostForm)
+    closeModal("createPost")
+    setNewPost(postInitialValue)
   }
 
   return (

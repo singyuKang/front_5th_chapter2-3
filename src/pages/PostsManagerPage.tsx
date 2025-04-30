@@ -21,7 +21,7 @@ import { useURLSync } from "@features/filter-management/model/useURLSync"
 const PostsManager = () => {
   const updatePostMutation = useUpdatePost()
   const deletePostMutation = useDeletePost()
-  const addPostMutation = useAddPost()
+  // const addPostMutation = useAddPost()
   const likeCommentMutation = useLikeComment()
   const addCommentMutation = useAddComment()
   const updateCommentMutation = useUpdateComment()

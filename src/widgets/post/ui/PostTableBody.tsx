@@ -10,22 +10,27 @@ export const PostsTableBody = () => {
   const { posts } = useQueryPostList()
   const { openUserModal, openPostDetailModal, openEditModal } = usePostModals()
 
-  //   console.log("🚀 ~ PostsTableBody ~ posts:", posts)
-
-  //   const hasNotPosts = !posts.posts || posts.posts.length === 0
-  //   if (hasNotPosts) return <div className="p-6">로딩 중...</div>
+  const hasNotPosts = !posts.posts || posts.posts.length === 0
 
   return (
     <tbody className="border-t">
-      {posts.posts.map((post, index) => (
-        <tr key={`${index}th-${post.id}-post-row`}>
-          <TableCell>{post.id.toString()}</TableCell>
-          <PostTitleInfoTableCell title={post.title} tags={post.tags} />
-          <PostUserInfoTableCell userId={post.userId} openUserModal={openUserModal} />
-          <PostLikeInfoTableCell reactions={post.reactions} />
-          <PostReactInfoTableCell post={post} openEditModal={openEditModal} openPostDetail={openPostDetailModal} />
+      {hasNotPosts ? (
+        <tr>
+          <td colSpan={5} className="p-6 text-center">
+            로딩 중...
+          </td>
         </tr>
-      ))}
+      ) : (
+        posts.posts.map((post, index) => (
+          <tr key={`${index}th-${post.id}-post-row`}>
+            <TableCell>{post.id.toString()}</TableCell>
+            <PostTitleInfoTableCell title={post.title} tags={post.tags} />
+            <PostUserInfoTableCell userId={post.userId} openUserModal={openUserModal} />
+            <PostLikeInfoTableCell reactions={post.reactions} />
+            <PostReactInfoTableCell post={post} openEditModal={openEditModal} openPostDetail={openPostDetailModal} />
+          </tr>
+        ))
+      )}
     </tbody>
   )
 }

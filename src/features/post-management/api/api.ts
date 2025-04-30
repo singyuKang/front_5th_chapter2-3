@@ -3,7 +3,6 @@ import {
   addPost,
   deletePost,
   getPostsByTag,
-  getPostsList,
   readPostApi,
   searchPosts,
   updatePost,
@@ -11,45 +10,6 @@ import {
 import { getUsersList } from "../../../entities/user/api/api"
 import { useSearchParams } from "@features/filter-management/model/useSearchParams"
 import { PostResponse } from "@entities/post/model/type"
-
-export const usePostsWithUsers = ({ limit, skip }) => {
-  // 게시물 쿼리
-  const postsQuery = useQuery({
-    queryKey: ["posts", { limit, skip }],
-    queryFn: () => getPostsList({ limit, skip }),
-  })
-
-  // 사용자 쿼리
-  const usersQuery = useQuery({
-    queryKey: ["users", "minimal"],
-    queryFn: () => getUsersList({}),
-  })
-
-  // 로딩 상태
-  const isLoading = postsQuery.isLoading || usersQuery.isLoading
-  const isError = postsQuery.isError || usersQuery.isError
-  const error = postsQuery.error || usersQuery.error
-
-  // 데이터 조합
-  let posts = []
-  let total = 0
-
-  if (postsQuery.data && usersQuery.data) {
-    total = postsQuery.data.total
-    posts = postsQuery.data.posts.map((post) => ({
-      ...post,
-      author: usersQuery.data.users.find((user) => user.id === post.userId),
-    }))
-  }
-
-  return {
-    posts,
-    total,
-    isLoading,
-    isError,
-    error,
-  }
-}
 
 export const usePostsByTag = (tag) => {
   // 태그가 없거나 'all'이면 쿼리 비활성화
@@ -126,15 +86,20 @@ export const useDeletePost = () => {
   })
 }
 
-export const useAddPost = () => {
+export const useMutationPostCreate = () => {
   const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: (newPost) => addPost(newPost),
+  const { mutate: createPost } = useMutation({
+    mutationFn: addPost,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] })
+      // 성공 시 posts 관련 쿼리 캐시 무효화
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      })
     },
   })
+
+  return { createPost }
 }
 
 const DEFAULT_QUERY_RESULT: PostResponse = {
