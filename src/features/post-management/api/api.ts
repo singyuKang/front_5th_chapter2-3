@@ -1,17 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { addPost, deletePost, readPostApi, updatePost } from "../../../entities/post/api/api"
+import { addPost, deletePostAPi, readPostApi, updatePost } from "../../../entities/post/api/api"
 import { useSearchParams } from "@features/filter-management/model/useSearchParams"
 import { Post, PostResponse } from "@entities/post/model/type"
 
 export const useDeletePost = () => {
   const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: (id: number) => deletePost(id),
+  const { mutate: deletePost } = useMutation({
+    mutationFn: (id: number) => deletePostAPi(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] })
     },
   })
+
+  return { deletePost }
 }
 
 export const useMutationPostCreate = () => {

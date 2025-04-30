@@ -53,7 +53,7 @@ export const updatePost = async (selectedPost: Partial<Post>): Promise<Post> => 
   }
 }
 
-export const deletePost = async (id: number): Promise<number> => {
+export const deletePostAPi = async (id: number): Promise<number> => {
   try {
     await fetch(`/api/posts/${id}`, {
       method: "DELETE",
