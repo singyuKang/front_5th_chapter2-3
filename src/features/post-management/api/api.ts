@@ -9,7 +9,7 @@ import {
 } from "../../../entities/post/api/api"
 import { getUsersList } from "../../../entities/user/api/api"
 import { useSearchParams } from "@features/filter-management/model/useSearchParams"
-import { PostResponse } from "@entities/post/model/type"
+import { Post, PostResponse } from "@entities/post/model/type"
 
 export const usePostsByTag = (tag) => {
   // 태그가 없거나 'all'이면 쿼리 비활성화
@@ -88,20 +88,42 @@ export const useDeletePost = () => {
 
 export const useMutationPostCreate = () => {
   const queryClient = useQueryClient()
+  const searchParams = useSearchParams((state) => state.searchParams)
 
-  const { mutate: createPost } = useMutation({
+  const addPostToCache = (newPost: Post, oldData: PostResponse) => ({
+    limit: oldData.limit,
+    skip: oldData.skip,
+    posts: [
+      {
+        id: newPost.id,
+        title: newPost.title,
+        userId: newPost.userId,
+        body: newPost.body,
+        reactions: { likes: 0, dislikes: 0 },
+        tags: [],
+        views: 0,
+      },
+      ...(oldData?.posts || []),
+    ],
+    total: (oldData?.total || 0) + 1,
+  })
+
+  const {
+    mutate: createPost,
+    isError,
+    error,
+  } = useMutation({
     mutationFn: addPost,
-    onSuccess: () => {
-      // 성공 시 posts 관련 쿼리 캐시 무효화
-      queryClient.invalidateQueries({
-        queryKey: ["posts"],
+    onSuccess: (data: Post) => {
+      queryClient.setQueryData(["posts", searchParams], (oldData: PostResponse) => {
+        if (!oldData) return oldData
+        return addPostToCache(data, oldData)
       })
     },
   })
 
-  return { createPost }
+  return { createPost, isError, error }
 }
-
 const DEFAULT_QUERY_RESULT: PostResponse = {
   posts: [],
   total: 0,
