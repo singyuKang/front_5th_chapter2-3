@@ -6,7 +6,7 @@ import {
   likeComment,
   updateComment,
 } from "../../../entities/comment/api/api.ts"
-import { CommentsResponse } from "@entities/comment/model/types.ts"
+import { Comment, CommentsResponse } from "@entities/comment/model/types.ts"
 
 export const useCommentsByPostId = (postId?: number) => {
   const { data, isLoading, error } = useQuery<CommentsResponse>({
@@ -40,10 +40,24 @@ export const useLikeComment = () => {
 export const useAddComment = () => {
   const queryClient = useQueryClient()
 
+  const addCommentToCache = (newComment: Comment, oldComment: CommentsResponse) => ({
+    ...oldComment,
+    comments: [
+      {
+        ...newComment,
+        id: oldComment?.comments?.length || 0,
+      },
+      ...(oldComment?.comments || []),
+    ],
+    total: (oldComment?.total || 0) + 1,
+  })
+
   const { mutate: addComment } = useMutation({
     mutationFn: addCommentApi,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["comments", data.postId] })
+    onSuccess: (data: Comment) => {
+      queryClient.setQueryData(["comments", data.postId], (oldComment: CommentsResponse) =>
+        addCommentToCache(data, oldComment),
+      )
     },
   })
 
