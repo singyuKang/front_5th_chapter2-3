@@ -5,7 +5,7 @@ import { User, UserList } from "@entities/user/model/types"
 import { userCache } from "@entities/user/lib"
 import { authorValue } from "../config/autherValue"
 
-export const useUserById = (userId, options = {}) => {
+export const useUserById = (userId: number, options = {}) => {
   return useQuery({
     queryKey: ["user", userId],
     queryFn: () => getUserById(userId),

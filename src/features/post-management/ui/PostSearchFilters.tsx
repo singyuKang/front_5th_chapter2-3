@@ -1,4 +1,4 @@
-import { useTagsList } from "@entities/tag/model/model"
+import { Tag, useTagsList } from "@entities/tag/model/model"
 import { sortValue } from "@features/filter-management/config/sortValue"
 import { useSearchParams } from "@features/filter-management/model/useSearchParams"
 import { SearchInput } from "@shared/ui/input/SearchInput"
@@ -30,7 +30,7 @@ export const PostSearchFilters: React.FC = () => {
   // 태그 선택 아이템 구성
   const tagItems = [
     { id: 0, value: "all", label: "모든 태그" },
-    ...(tags?.map((tag, index) => ({
+    ...(tags?.map((tag: Tag, index: number) => ({
       id: index + 1,
       value: tag.slug,
       label: tag.slug,
