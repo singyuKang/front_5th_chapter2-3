@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useAddPost, useDeletePost, useUpdatePost } from "../features/post-management/api/api"
+import { useAddPost, useDeletePost } from "../features/post-management/api/api"
 import {
   useAddComment,
   useDeleteComment,
@@ -19,7 +19,6 @@ import CreatePostModal from "@features/post-management/ui/CreatePostModal"
 import { useURLSync } from "@features/filter-management/model/useURLSync"
 
 const PostsManager = () => {
-  const updatePostMutation = useUpdatePost()
   const deletePostMutation = useDeletePost()
   // const addPostMutation = useAddPost()
   const likeCommentMutation = useLikeComment()
@@ -28,17 +27,6 @@ const PostsManager = () => {
   const deleteCommentMutation = useDeleteComment()
 
   useURLSync()
-
-  const handleUpdatePost = () => {
-    updatePostMutation.mutate(selectedPost, {
-      onSuccess: () => {
-        setShowEditDialog(false)
-      },
-      onError: (error) => {
-        console.error("게시물 업데이트 오류:", error)
-      },
-    })
-  }
 
   const handleDeletePost = (id) => {
     deletePostMutation.mutate(id, {

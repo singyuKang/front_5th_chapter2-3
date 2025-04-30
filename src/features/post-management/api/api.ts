@@ -64,17 +64,6 @@ export const useSearchPosts = (query) => {
   })
 }
 
-export const useUpdatePost = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: (postData) => updatePost(postData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] })
-    },
-  })
-}
-
 export const useDeletePost = () => {
   const queryClient = useQueryClient()
 
@@ -143,6 +132,41 @@ export const useQueryPostList = () => {
   return {
     posts: data,
     isLoading,
+    error,
+  }
+}
+
+export const useMutationEditPostUpdate = () => {
+  const queryClient = useQueryClient()
+  const searchParams = useSearchParams((state) => state.searchParams)
+
+  const updatePostInCache = (updatedPost: Post, oldData: PostResponse) => ({
+    limit: oldData.limit,
+    skip: oldData.skip,
+    posts: (oldData?.posts || []).map((post) => (post.id === updatedPost.id ? updatedPost : post)),
+    total: oldData?.total || 0,
+  })
+
+  const {
+    mutate: editPost,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: updatePost,
+    onSuccess: (data: Post) => {
+      queryClient.setQueryData(["posts", searchParams], (oldData: PostResponse) => {
+        if (!oldData) return oldData
+        return updatePostInCache(data, oldData)
+      })
+    },
+    onError: (error) => {
+      console.error("게시물 업데이트 오류:", error)
+    },
+  })
+
+  return {
+    editPost,
+    isError,
     error,
   }
 }
