@@ -1,5 +1,5 @@
 import { User } from "@entities/user/model/types"
-import { useQueryPostAuthor } from "@features/user-management/api/api"
+import { useQueryPostAuthor } from "@features/user/api/api"
 import { TableCell } from "@shared/ui/table/TableCell"
 
 type PostUserInfoTablePropsType = {

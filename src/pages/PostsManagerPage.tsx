@@ -1,6 +1,6 @@
 import { PostsHeader } from "@widgets/post/ui"
 import { PostsTableContainer } from "@widgets/post/ui/PostsTableContainer"
-import { UserDetailModal } from "@features/user-management/ui/UserDetailModal"
+import { UserDetailModal } from "@features/user/ui/UserDetailModal"
 import { PostDetailModal } from "@features/post/ui/PostDetailModal"
 import EditCommentModal from "@features/comment/ui/EditCommentModal"
 import EditPostModal from "@features/post/ui/EditPostModal"

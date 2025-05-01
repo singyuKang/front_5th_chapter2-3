@@ -1,6 +1,6 @@
 import { User } from "@entities/user/model/types"
 import { useModal } from "@features/modal/hooks/useModal"
-import { useSelectedUser } from "@features/user-management/model/useSelectedUser"
+import { useSelectedUser } from "@features/user/model/useSelectedUser"
 import { useSelectedPostHook } from "../model/useSelectedPost"
 import { Post } from "@entities/post/model/type"
 
