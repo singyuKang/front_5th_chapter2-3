@@ -16,18 +16,20 @@ export const getCommentsByPostId = async (postId: number): Promise<CommentsRespo
   }
 }
 
-export const likeComment = async ({ id, likes }) => {
-  const response = await fetch(`/api/comments/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ likes }),
-  })
+export const likeCommentApi = async ({ id, likes }: { id: number; likes: number }) => {
+  try {
+    const response = await fetch(`/api/comments/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ likes }),
+    })
+    const data = response.json()
 
-  if (!response.ok) {
-    throw new Error("댓글 좋아요 실패")
+    return data
+  } catch (error) {
+    console.error("댓글 좋아요 오류:", error)
+    throw new Error(`댓글 좋아요 오류: ${error}`)
   }
-
-  return response.json()
 }
 
 export const addCommentApi = async (commentData: NewComment) => {

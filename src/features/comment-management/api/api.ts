@@ -3,7 +3,7 @@ import {
   addCommentApi,
   deleteComment,
   getCommentsByPostId,
-  likeComment,
+  likeCommentApi,
   updateCommentApi,
 } from "../../../entities/comment/api/api.ts"
 import { Comment, CommentsResponse } from "@entities/comment/model/types.ts"
@@ -28,13 +28,24 @@ export const useCommentsByPostId = (postId?: number) => {
 export const useLikeComment = () => {
   const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: likeComment,
-    onSuccess: (data) => {
-      // 댓글 쿼리 무효화
-      queryClient.invalidateQueries({ queryKey: ["comments", data.postId] })
+  const updateLikeInCache = (updatedComment: Comment, oldData: CommentsResponse) => ({
+    ...oldData,
+    comments:
+      oldData?.comments?.map((comment) =>
+        comment.id === updatedComment.id ? { ...comment, likes: comment.likes + 1 } : comment,
+      ) || [],
+  })
+
+  const { mutate: likeComment } = useMutation({
+    mutationFn: likeCommentApi,
+    onSuccess: (data: Comment) => {
+      queryClient.setQueryData(["comments", data.postId], (oldData: CommentsResponse) =>
+        updateLikeInCache(data, oldData),
+      )
     },
   })
+
+  return { likeComment }
 }
 
 export const useAddComment = () => {

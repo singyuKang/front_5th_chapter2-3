@@ -1,5 +1,5 @@
 import { Comment } from "@entities/comment/model/types"
-import { useCommentsByPostId } from "../api/api"
+import { useCommentsByPostId, useLikeComment } from "../api/api"
 import { highlightText } from "@shared/utils/highlightText"
 import { Button } from "@shared/ui"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
@@ -15,6 +15,16 @@ export const CommentInfoBox: React.FC<PropsType> = ({ postId, searchQuery }) => 
   const { comments } = useCommentsByPostId(postId)
   const { openModal } = useModal()
   const { updateSelectedComment } = useSelectedComment()
+  const { likeComment } = useLikeComment()
+
+  const handleLikeClick = (comment: Comment) => {
+    likeComment({ id: comment.id, likes: comment.likes + 1 })
+  }
+
+  const handleUpdateClick = (comment: Comment) => {
+    openModal("editComment")
+    updateSelectedComment(comment)
+  }
 
   if (!comments) return <></>
 
@@ -48,6 +58,7 @@ export const CommentInfoBox: React.FC<PropsType> = ({ postId, searchQuery }) => 
                 size="sm"
                 onClick={() => {
                   // TODO : like UpdateComment
+                  handleLikeClick(comment)
                 }}
               >
                 <ThumbsUp className="w-3 h-3" />
@@ -58,8 +69,7 @@ export const CommentInfoBox: React.FC<PropsType> = ({ postId, searchQuery }) => 
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  openModal("editComment")
-                  updateSelectedComment(comment)
+                  handleUpdateClick(comment)
                 }}
               >
                 <Edit2 className="w-3 h-3" />
