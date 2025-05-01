@@ -1,4 +1,4 @@
-import { CommentsResponse, NewComment } from "../model/types"
+import { Comment, CommentsResponse, NewComment } from "../model/types"
 
 export const getCommentsByPostId = async (postId: number): Promise<CommentsResponse> => {
   try {
@@ -45,18 +45,19 @@ export const addCommentApi = async (commentData: NewComment) => {
   }
 }
 
-export const updateComment = async ({ id, body }) => {
-  const response = await fetch(`/api/comments/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ body }),
-  })
-
-  if (!response.ok) {
-    throw new Error("댓글 업데이트 실패")
+export const updateCommentApi = async (comment: Comment): Promise<Comment> => {
+  try {
+    const response = await fetch(`/api/comments/${comment.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ body: comment.body, likes: comment.likes }),
+    })
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error("댓글 수정 오류:", error)
+    throw new Error(`댓글 수정 오류: ${error}`)
   }
-
-  return response.json()
 }
 
 export const deleteComment = async ({ id, postId }) => {

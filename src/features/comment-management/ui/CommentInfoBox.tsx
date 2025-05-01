@@ -4,6 +4,7 @@ import { highlightText } from "@shared/utils/highlightText"
 import { Button } from "@shared/ui"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import { useModal } from "@features/modal/hooks/useModal"
+import { useSelectedComment } from "../hooks/useSelectedComment"
 
 interface PropsType {
   postId: number
@@ -13,6 +14,7 @@ interface PropsType {
 export const CommentInfoBox: React.FC<PropsType> = ({ postId, searchQuery }) => {
   const { comments } = useCommentsByPostId(postId)
   const { openModal } = useModal()
+  const { updateSelectedComment } = useSelectedComment()
 
   if (!comments) return <></>
 
@@ -56,7 +58,8 @@ export const CommentInfoBox: React.FC<PropsType> = ({ postId, searchQuery }) => 
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  // TODO : Edit Comment
+                  openModal("editComment")
+                  updateSelectedComment(comment)
                 }}
               >
                 <Edit2 className="w-3 h-3" />

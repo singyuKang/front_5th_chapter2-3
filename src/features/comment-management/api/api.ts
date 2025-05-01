@@ -4,7 +4,7 @@ import {
   deleteComment,
   getCommentsByPostId,
   likeComment,
-  updateComment,
+  updateCommentApi,
 } from "../../../entities/comment/api/api.ts"
 import { Comment, CommentsResponse } from "@entities/comment/model/types.ts"
 
@@ -67,12 +67,25 @@ export const useAddComment = () => {
 export const useUpdateComment = () => {
   const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: updateComment,
+  const updateCommentCache = (oldComment: CommentsResponse, newComment: Comment) => {
+    return {
+      limit: oldComment.limit,
+      skip: oldComment.skip,
+      comments: oldComment.comments.map((comment) => (comment.id === newComment.id ? newComment : comment)),
+      total: (oldComment?.total || 0) + 1,
+    }
+  }
+
+  const { mutate: updateComment } = useMutation({
+    mutationFn: updateCommentApi,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["comments", data.postId] })
+      queryClient.setQueryData(["comments", data.postId], (oldComment: CommentsResponse) =>
+        updateCommentCache(oldComment, data),
+      )
     },
   })
+
+  return { updateComment }
 }
 
 export const useDeleteComment = () => {

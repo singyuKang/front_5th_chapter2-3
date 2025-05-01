@@ -3,47 +3,31 @@ import { Button } from "@shared/ui"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { Textarea } from "@shared/ui/textarea/TextArea"
 import useCommentForm from "../hooks/useCommentForm"
-
-export const commentFormValue = {
-  form: {
-    userId: 1,
-    postId: -1,
-    body: "",
-  },
-  comment: {
-    id: -1,
-    postId: -1,
-    body: "",
-    likes: 0,
-    user: {
-      id: -1,
-      username: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-      age: 0,
-      phone: "",
-      image: "",
-      address: {
-        address: "",
-        city: "",
-        state: "",
-      },
-      company: {
-        name: "",
-        title: "",
-      },
-    },
-  },
-}
+import { useUpdateComment } from "../api/api"
+import { useSelectedComment } from "../hooks/useSelectedComment"
+import { useEffect } from "react"
+import { Comment } from "@entities/comment/model/types"
+import { commentFormValue } from "../config/commentFormValue"
 
 export const EditCommentModal: React.FC = () => {
   const { openEditComment, closeModal } = useModal()
-  const { commentForm, updateCommentForm } = useCommentForm(commentFormValue.form)
+
+  const { selectedComment } = useSelectedComment()
+
+  const { commentForm, updateCommentForm, resetCommentForm } = useCommentForm(commentFormValue.form)
+  const { updateComment } = useUpdateComment()
+
+  useEffect(() => {
+    updateCommentForm({
+      postId: selectedComment?.id,
+      body: selectedComment?.body,
+    })
+  }, [selectedComment])
 
   const handleSubmitComment = () => {
-    // TODO Submit Comment
-    console.log("Submit Comment")
+    updateComment({ ...selectedComment, ...commentForm } as Comment)
+    closeModal("editComment")
+    resetCommentForm()
   }
 
   return (

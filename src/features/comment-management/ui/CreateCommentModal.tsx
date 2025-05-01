@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dia
 import { Textarea } from "@shared/ui/textarea/TextArea"
 import { useAddComment } from "../api/api"
 import useCommentForm from "../hooks/useCommentForm"
-import { commentFormValue } from "./EditCommentModal"
+import { commentFormValue } from "../config/commentFormValue"
 import { useSelectedPostHook } from "@features/post-management/model/useSelectedPost"
 import { useEffect } from "react"
 
