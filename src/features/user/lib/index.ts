@@ -1,4 +1,4 @@
-import { User } from "../model/types"
+import { User } from "@entities/user/model/types"
 
 export const userCache = (() => {
   const cache = new Map<number, User>()

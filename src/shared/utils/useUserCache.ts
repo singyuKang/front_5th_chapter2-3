@@ -1,5 +1,5 @@
 import { getAllUsersApi, getUserByIdApi } from "@entities/user/api/api"
-import { userCache } from "@entities/user/lib"
+import { userCache } from "@features/user/lib"
 import { useEffect } from "react"
 
 export const useUserCache = () => {
