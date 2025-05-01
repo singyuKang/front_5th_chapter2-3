@@ -1,4 +1,4 @@
-import { getAllUsers, getUserById } from "@entities/user/api/api"
+import { getAllUsersApi, getUserByIdApi } from "@entities/user/api/api"
 import { userCache } from "@entities/user/lib"
 import { useEffect } from "react"
 
@@ -8,7 +8,7 @@ export const useUserCache = () => {
   }, [])
 
   const fetchUsers = async () => {
-    const data = await getAllUsers()
+    const data = await getAllUsersApi()
     if (!data) return
 
     if (data) userCache.setUser(data)
@@ -18,7 +18,7 @@ export const useUserCache = () => {
     const cacheUser = userCache.getUser(id)
     if (cacheUser) return cacheUser
 
-    const data = await getUserById(id)
+    const data = await getUserByIdApi(id)
     if (!data) return null
 
     if (data) userCache.updateUser(data)

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getTagsList } from "../api/api.ts"
+import { getTagsListApi } from "../api/api.ts"
 
 export interface Tag {
   slug: string
@@ -10,6 +10,6 @@ export interface Tag {
 export const useTagsList = () => {
   return useQuery({
     queryKey: ["tags"],
-    queryFn: getTagsList,
+    queryFn: getTagsListApi,
   })
 }

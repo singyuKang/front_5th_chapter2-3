@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { addPost, deletePostAPi, readPostApi, updatePost } from "../../../entities/post/api/api"
+import { addPostApi, deletePostAPi, readPostApi, updatePostApi } from "../../../entities/post/api/api"
 import { useSearchParams } from "@features/filter/model/useSearchParams"
 import { Post, PostResponse } from "@entities/post/model/type"
 
@@ -51,7 +51,7 @@ export const useMutationPostCreate = () => {
     isError,
     error,
   } = useMutation({
-    mutationFn: addPost,
+    mutationFn: addPostApi,
     onSuccess: (data: Post) => {
       queryClient.setQueryData(["posts", searchParams], (oldData: PostResponse) => {
         if (!oldData) return oldData
@@ -101,7 +101,7 @@ export const useMutationEditPostUpdate = () => {
     isError,
     error,
   } = useMutation({
-    mutationFn: updatePost,
+    mutationFn: updatePostApi,
     onSuccess: (data: Post) => {
       queryClient.setQueryData(["posts", searchParams], (oldData: PostResponse) => {
         if (!oldData) return oldData

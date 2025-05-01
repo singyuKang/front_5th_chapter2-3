@@ -5,7 +5,7 @@ import {
   getCommentsByPostIdApi,
   likeCommentApi,
   updateCommentApi,
-} from "../../../entities/comment/api/api.ts"
+} from "@entities/comment/api/api.ts"
 import { Comment, CommentsResponse, DeletedCommentResponse } from "@entities/comment/model/types.ts"
 
 export const useCommentsByPostId = (postId?: number) => {

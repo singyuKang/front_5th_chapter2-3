@@ -3,29 +3,7 @@ import { Post, PostForm, PostResponse } from "../model/type"
 import { buildURLPath } from "@features/filter/utils/buildURLPath"
 import { apiFetch } from "@shared/utils/apiFetch"
 
-export const getPostsByTag = async (tag: string): Promise<PostResponse | null> => {
-  if (!tag || tag === "all") return null
-
-  try {
-    return await apiFetch(`/posts/tag/${tag}`)
-  } catch (error) {
-    console.error("태그별 게시물 가져오기 실패:", error)
-    throw new Error("태그별 게시물 가져오기 실패")
-  }
-}
-
-export const searchPosts = async (query: string): Promise<PostResponse | null> => {
-  if (!query) return null
-
-  try {
-    return await apiFetch(`/posts/search?q=${encodeURIComponent(query)}`)
-  } catch (error) {
-    console.error("검색 중 오류 발생:", error)
-    throw new Error(`게시물 검색 중 오류 발생: ${error instanceof Error ? error.message : "알 수 없는 오류"}`)
-  }
-}
-
-export const updatePost = async (selectedPost: Partial<Post>): Promise<Post> => {
+export const updatePostApi = async (selectedPost: Partial<Post>): Promise<Post> => {
   try {
     return await apiFetch(`/posts/${selectedPost.id}`, {
       method: "PUT",
@@ -50,7 +28,7 @@ export const deletePostAPi = async (id: number): Promise<number> => {
   }
 }
 
-export const addPost = async (newPost: PostForm): Promise<Post> => {
+export const addPostApi = async (newPost: PostForm): Promise<Post> => {
   try {
     return await apiFetch("/posts/add", {
       method: "POST",

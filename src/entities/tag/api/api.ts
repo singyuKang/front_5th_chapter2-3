@@ -1,6 +1,6 @@
 import { apiFetch } from "@shared/utils/apiFetch"
 
-export const getTagsList = async () => {
+export const getTagsListApi = async () => {
   try {
     return await apiFetch("/posts/tags")
   } catch (error) {
