@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   addCommentApi,
   deleteCommentApi,
-  getCommentsByPostId,
+  getCommentsByPostIdApi,
   likeCommentApi,
   updateCommentApi,
 } from "../../../entities/comment/api/api.ts"
@@ -11,7 +11,7 @@ import { Comment, CommentsResponse, DeletedCommentResponse } from "@entities/com
 export const useCommentsByPostId = (postId?: number) => {
   const { data, isLoading, error } = useQuery<CommentsResponse>({
     queryKey: ["comments", postId],
-    queryFn: () => getCommentsByPostId(postId as number),
+    queryFn: () => getCommentsByPostIdApi(postId as number),
     enabled: !!postId,
     staleTime: 60000,
   })

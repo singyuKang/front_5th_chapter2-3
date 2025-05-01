@@ -1,6 +1,6 @@
 import { Comment, CommentsResponse, DeletedCommentResponse, NewComment } from "../model/types"
 
-export const getCommentsByPostId = async (postId: number): Promise<CommentsResponse> => {
+export const getCommentsByPostIdApi = async (postId: number): Promise<CommentsResponse> => {
   try {
     const response = await fetch(`/api/comments/post/${postId}`)
 
@@ -16,7 +16,7 @@ export const getCommentsByPostId = async (postId: number): Promise<CommentsRespo
   }
 }
 
-export const likeCommentApi = async ({ id, likes }: { id: number; likes: number }) => {
+export const likeCommentApi = async ({ id, likes }: { id: number; likes: number }): Promise<Comment> => {
   try {
     const response = await fetch(`/api/comments/${id}`, {
       method: "PATCH",
@@ -24,7 +24,6 @@ export const likeCommentApi = async ({ id, likes }: { id: number; likes: number 
       body: JSON.stringify({ likes }),
     })
     const data = response.json()
-
     return data
   } catch (error) {
     console.error("댓글 좋아요 오류:", error)
