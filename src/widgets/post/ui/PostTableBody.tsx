@@ -1,9 +1,9 @@
-import { useQueryPostList } from "@features/post-management/api/api"
-import { usePostModals } from "@features/post-management/hooks/usePostModal"
-import { PostLikeInfoTableCell } from "@features/post-management/ui/PostLikeInfoTableCell"
-import { PostReactInfoTableCell } from "@features/post-management/ui/PostReactInfoTableCell"
-import { PostTitleInfoTableCell } from "@features/post-management/ui/PostTitleInfoTableCell"
-import { PostUserInfoTableCell } from "@features/post-management/ui/PostUserInfoTableCell"
+import { useQueryPostList } from "@features/post/api/api"
+import { usePostModals } from "@features/post/hooks/usePostModal"
+import { PostLikeInfoTableCell } from "@features/post/ui/PostLikeInfoTableCell"
+import { PostReactInfoTableCell } from "@features/post/ui/PostReactInfoTableCell"
+import { PostTitleInfoTableCell } from "@features/post/ui/PostTitleInfoTableCell"
+import { PostUserInfoTableCell } from "@features/post/ui/PostUserInfoTableCell"
 import { TableCell } from "@shared/ui/table/TableCell"
 
 export const PostsTableBody = () => {

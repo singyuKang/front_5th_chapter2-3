@@ -1,5 +1,5 @@
 import { useSearchParams } from "@features/filter/model/useSearchParams"
-import { pageValue } from "@features/post-management/config/pagaValue"
+import { pageValue } from "@features/post/config/pagaValue"
 import { Button } from "@shared/ui"
 import { SelectRoot } from "@shared/ui/select/SelectRoot"
 

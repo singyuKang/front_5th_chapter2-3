@@ -5,7 +5,7 @@ import { Textarea } from "@shared/ui/textarea/TextArea"
 import { useAddComment } from "../api/api"
 import useCommentForm from "../hooks/useCommentForm"
 import { commentFormValue } from "../config/commentFormValue"
-import { useSelectedPostHook } from "@features/post-management/model/useSelectedPost"
+import { useSelectedPostHook } from "@features/post/model/useSelectedPost"
 import { useEffect } from "react"
 
 const CreateCommentModal = () => {

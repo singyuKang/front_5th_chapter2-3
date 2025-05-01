@@ -1,11 +1,11 @@
 import { PostsHeader } from "@widgets/post/ui"
 import { PostsTableContainer } from "@widgets/post/ui/PostsTableContainer"
 import { UserDetailModal } from "@features/user-management/ui/UserDetailModal"
-import { PostDetailModal } from "@features/post-management/ui/PostDetailModal"
+import { PostDetailModal } from "@features/post/ui/PostDetailModal"
 import EditCommentModal from "@features/comment/ui/EditCommentModal"
-import EditPostModal from "@features/post-management/ui/EditPostModal"
+import EditPostModal from "@features/post/ui/EditPostModal"
 import CreateCommentModal from "@features/comment/ui/CreateCommentModal"
-import CreatePostModal from "@features/post-management/ui/CreatePostModal"
+import CreatePostModal from "@features/post/ui/CreatePostModal"
 import { useURLSync } from "@features/filter/model/useURLSync"
 
 const PostsManager = () => {

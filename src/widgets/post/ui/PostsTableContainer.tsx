@@ -1,5 +1,5 @@
-import { useQueryPostList } from "@features/post-management/api/api"
-import { PostSearchFilters } from "@features/post-management/ui/PostSearchFilters"
+import { useQueryPostList } from "@features/post/api/api"
+import { PostSearchFilters } from "@features/post/ui/PostSearchFilters"
 import { useUserCache } from "@features/user-management/api/api"
 import { PostTotalTable } from "./PostTotalTable"
 import { PostPagination } from "./PostPagination"
