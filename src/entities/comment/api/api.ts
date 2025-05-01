@@ -1,4 +1,4 @@
-import { Comment, CommentsResponse, NewComment } from "../model/types"
+import { Comment, CommentsResponse, DeletedCommentResponse, NewComment } from "../model/types"
 
 export const getCommentsByPostId = async (postId: number): Promise<CommentsResponse> => {
   try {
@@ -62,14 +62,15 @@ export const updateCommentApi = async (comment: Comment): Promise<Comment> => {
   }
 }
 
-export const deleteComment = async ({ id, postId }) => {
-  const response = await fetch(`/api/comments/${id}`, {
-    method: "DELETE",
-  })
-
-  if (!response.ok) {
-    throw new Error("댓글 삭제 실패")
+export const deleteCommentApi = async (id: number): Promise<DeletedCommentResponse> => {
+  try {
+    const response = await fetch(`/api/comments/${id}`, {
+      method: "DELETE",
+    })
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error("댓글 삭제 오류:", error)
+    throw new Error(`댓글 삭제 오류: ${error}`)
   }
-
-  return { id, postId }
 }

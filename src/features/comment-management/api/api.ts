@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   addCommentApi,
-  deleteComment,
+  deleteCommentApi,
   getCommentsByPostId,
   likeCommentApi,
   updateCommentApi,
 } from "../../../entities/comment/api/api.ts"
-import { Comment, CommentsResponse } from "@entities/comment/model/types.ts"
+import { Comment, CommentsResponse, DeletedCommentResponse } from "@entities/comment/model/types.ts"
 
 export const useCommentsByPostId = (postId?: number) => {
   const { data, isLoading, error } = useQuery<CommentsResponse>({
@@ -102,10 +102,25 @@ export const useUpdateComment = () => {
 export const useDeleteComment = () => {
   const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: deleteComment,
-    onSuccess: ({ postId }) => {
-      queryClient.invalidateQueries({ queryKey: ["comments", postId] })
+  const updateCommentCache = (response: CommentsResponse, deleteCommentResponse: DeletedCommentResponse) => {
+    if (!response || !response.comments) return response
+
+    return {
+      ...response,
+      comments: response.comments.filter((comment) => comment.id !== deleteCommentResponse.id),
+      total: Math.max(0, response.total - 1),
+    }
+  }
+
+  const { mutate: deleteComment } = useMutation({
+    mutationFn: deleteCommentApi,
+    onSuccess: (deleteCommentResponse: DeletedCommentResponse) => {
+      queryClient.setQueryData(["comments", deleteCommentResponse.postId], (response: CommentsResponse) => {
+        const result = updateCommentCache(response, deleteCommentResponse)
+        return result
+      })
     },
   })
+
+  return { deleteComment }
 }

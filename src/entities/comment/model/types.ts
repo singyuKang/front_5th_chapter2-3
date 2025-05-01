@@ -19,3 +19,17 @@ export interface NewComment {
   postId: number
   userId: number
 }
+
+export interface DeletedCommentResponse {
+  id: number
+  body: string
+  postId: number
+  likes: number
+  user: {
+    id: number
+    username: string
+    fullName: string
+  }
+  deletedOn: string
+  isDeleted: boolean
+}
