@@ -1,4 +1,4 @@
-import { Post } from "@entities/post/model/type"
+import { Post } from "@entities/post/model"
 import { create } from "zustand"
 
 interface SelectedPostState {
