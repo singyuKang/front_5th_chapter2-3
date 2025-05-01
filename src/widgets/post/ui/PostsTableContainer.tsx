@@ -1,8 +1,8 @@
 import { useQueryPostList } from "@features/post/api/api"
 import { PostSearchFilters } from "@features/post/ui/PostSearchFilters"
-import { useUserCache } from "@features/user/api/api"
 import { PostTotalTable } from "./PostTotalTable"
 import { PostPagination } from "./PostPagination"
+import { useUserCache } from "@shared/utils/useUserCache"
 
 export const PostsTableContainer: React.FC = () => {
   const { posts } = useQueryPostList()

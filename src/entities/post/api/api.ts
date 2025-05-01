@@ -3,15 +3,6 @@ import { Post, PostForm, PostResponse } from "../model/type"
 import { buildURLPath } from "@features/filter/utils/buildURLPath"
 import { apiFetch } from "@shared/utils/apiFetch"
 
-export const getPostsList = async ({ limit, skip }: { limit: number; skip: number }): Promise<PostResponse | null> => {
-  try {
-    return await apiFetch(`/posts?limit=${limit}&skip=${skip}`)
-  } catch (error) {
-    console.error("게시물 가져오기 실패:", error)
-    throw new Error("게시물 가져오기 실패")
-  }
-}
-
 export const getPostsByTag = async (tag: string): Promise<PostResponse | null> => {
   if (!tag || tag === "all") return null
 
