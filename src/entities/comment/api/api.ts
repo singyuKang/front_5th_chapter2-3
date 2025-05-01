@@ -1,15 +1,9 @@
+import { apiFetch } from "@shared/utils/apiFetch"
 import { Comment, CommentsResponse, DeletedCommentResponse, NewComment } from "../model/types"
 
 export const getCommentsByPostIdApi = async (postId: number): Promise<CommentsResponse> => {
   try {
-    const response = await fetch(`/api/comments/post/${postId}`)
-
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`)
-    }
-
-    const data: CommentsResponse = await response.json()
-    return data
+    return await apiFetch(`/comments/post/${postId}`)
   } catch (error) {
     console.error("댓글 조회 오류:", error)
     throw new Error(`댓글 조회 오류: ${error instanceof Error ? error.message : "알 수 없는 오류"}`)
@@ -18,28 +12,24 @@ export const getCommentsByPostIdApi = async (postId: number): Promise<CommentsRe
 
 export const likeCommentApi = async ({ id, likes }: { id: number; likes: number }): Promise<Comment> => {
   try {
-    const response = await fetch(`/api/comments/${id}`, {
+    return await apiFetch(`/comments/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ likes }),
     })
-    const data = response.json()
-    return data
   } catch (error) {
     console.error("댓글 좋아요 오류:", error)
     throw new Error(`댓글 좋아요 오류: ${error}`)
   }
 }
 
-export const addCommentApi = async (commentData: NewComment) => {
+export const addCommentApi = async (commentData: NewComment): Promise<Comment> => {
   try {
-    const response = await fetch("/api/comments/add", {
+    return await apiFetch("/comments/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(commentData),
     })
-    const data = await response.json()
-    return data
   } catch (error) {
     console.error("댓글 추가 오류:", error)
     throw new Error(`댓글 추가 오류: ${error}`)
@@ -48,13 +38,11 @@ export const addCommentApi = async (commentData: NewComment) => {
 
 export const updateCommentApi = async (comment: Comment): Promise<Comment> => {
   try {
-    const response = await fetch(`/api/comments/${comment.id}`, {
+    return await apiFetch(`/comments/${comment.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ body: comment.body, likes: comment.likes }),
     })
-    const data = await response.json()
-    return data
   } catch (error) {
     console.error("댓글 수정 오류:", error)
     throw new Error(`댓글 수정 오류: ${error}`)
@@ -63,11 +51,9 @@ export const updateCommentApi = async (comment: Comment): Promise<Comment> => {
 
 export const deleteCommentApi = async (id: number): Promise<DeletedCommentResponse> => {
   try {
-    const response = await fetch(`/api/comments/${id}`, {
+    return await apiFetch(`/comments/${id}`, {
       method: "DELETE",
     })
-    const data = await response.json()
-    return data
   } catch (error) {
     console.error("댓글 삭제 오류:", error)
     throw new Error(`댓글 삭제 오류: ${error}`)
