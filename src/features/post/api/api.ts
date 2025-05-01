@@ -62,15 +62,15 @@ export const useMutationPostCreate = () => {
 
   return { createPost, isError, error }
 }
-const DEFAULT_QUERY_RESULT: PostResponse = {
-  posts: [],
-  total: 0,
-  skip: 0,
-  limit: 0,
-}
 
 export const useQueryPostList = () => {
   const searchParams = useSearchParams((state) => state.searchParams)
+  const DEFAULT_QUERY_RESULT: PostResponse = {
+    posts: [],
+    total: 0,
+    skip: 0,
+    limit: 0,
+  }
 
   const { data, isLoading, error } = useQuery<PostResponse>({
     queryKey: ["posts", searchParams],

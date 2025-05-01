@@ -1,24 +1,6 @@
 import { Comment } from "@entities/comment/model/types"
 import { create } from "zustand"
-
-const initialComment = {
-  id: -1,
-  body: "",
-  likes: -1,
-  postId: -1,
-  user: {
-    id: 0,
-    age: 0,
-    phone: "",
-    username: "",
-    firstName: "",
-    lastName: "",
-    address: { address: "", city: "", state: "" },
-    company: { name: "", title: "" },
-    email: "",
-    image: "",
-  },
-} as Comment
+import { commentFormValue } from "../config"
 
 interface SelectedCommentState {
   selectedComment: Comment
@@ -27,7 +9,7 @@ interface SelectedCommentState {
 }
 
 export const useSelectedComment = create<SelectedCommentState>((set) => ({
-  selectedComment: initialComment,
+  selectedComment: commentFormValue.comment,
 
   updateSelectedComment: (comment: Comment) =>
     set({
@@ -36,6 +18,6 @@ export const useSelectedComment = create<SelectedCommentState>((set) => ({
 
   resetSelectedComment: () =>
     set({
-      selectedComment: initialComment,
+      selectedComment: commentFormValue.comment,
     }),
 }))
