@@ -1,4 +1,4 @@
-import { useSearchParams } from "@features/filter-management/model/useSearchParams"
+import { useSearchParams } from "@features/filter/model/useSearchParams"
 import { pageValue } from "@features/post-management/config/pagaValue"
 import { Button } from "@shared/ui"
 import { SelectRoot } from "@shared/ui/select/SelectRoot"

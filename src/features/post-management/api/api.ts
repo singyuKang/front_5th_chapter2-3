@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { addPost, deletePostAPi, readPostApi, updatePost } from "../../../entities/post/api/api"
-import { useSearchParams } from "@features/filter-management/model/useSearchParams"
+import { useSearchParams } from "@features/filter/model/useSearchParams"
 import { Post, PostResponse } from "@entities/post/model/type"
 
 export const useDeletePost = () => {

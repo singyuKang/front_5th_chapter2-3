@@ -1,6 +1,6 @@
 import { Tag, useTagsList } from "@entities/tag/model/model"
-import { sortValue } from "@features/filter-management/config/sortValue"
-import { useSearchParams } from "@features/filter-management/model/useSearchParams"
+import { sortValue } from "@features/filter/config/sortValue"
+import { useSearchParams } from "@features/filter/model/useSearchParams"
 import { SearchInput } from "@shared/ui/input/SearchInput"
 import { SelectRoot } from "@shared/ui/select/SelectRoot"
 import React from "react"

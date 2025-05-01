@@ -2,7 +2,7 @@ import { useModal } from "@features/modal/hooks/useModal"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { highlightText } from "@shared/utils/highlightText"
 import { useSelectedPostHook } from "../model/useSelectedPost"
-import { useSearchParams } from "@features/filter-management/model/useSearchParams"
+import { useSearchParams } from "@features/filter/model/useSearchParams"
 import CommentInfoBox from "@features/comment/ui/CommentInfoBox"
 
 export const PostDetailModal: React.FC = () => {

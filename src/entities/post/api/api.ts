@@ -1,6 +1,6 @@
-import { SearchParams } from "@features/filter-management/model/types"
+import { SearchParams } from "@features/filter/model/types"
 import { Post, PostForm, PostResponse } from "../model/type"
-import { buildURLPath } from "@features/filter-management/utils/buildURLPath"
+import { buildURLPath } from "@features/filter/utils/buildURLPath"
 
 export const getPostsList = async ({ limit, skip }: { limit: number; skip: number }): Promise<PostResponse | null> => {
   const response = await fetch(`/api/posts?limit=${limit}&skip=${skip}`)

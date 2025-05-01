@@ -6,7 +6,7 @@ import EditCommentModal from "@features/comment/ui/EditCommentModal"
 import EditPostModal from "@features/post-management/ui/EditPostModal"
 import CreateCommentModal from "@features/comment/ui/CreateCommentModal"
 import CreatePostModal from "@features/post-management/ui/CreatePostModal"
-import { useURLSync } from "@features/filter-management/model/useURLSync"
+import { useURLSync } from "@features/filter/model/useURLSync"
 
 const PostsManager = () => {
   // const deletePostMutation = useDeletePost()

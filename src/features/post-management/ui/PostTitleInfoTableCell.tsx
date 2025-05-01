@@ -1,4 +1,4 @@
-import { useSearchParams } from "@features/filter-management/model/useSearchParams"
+import { useSearchParams } from "@features/filter/model/useSearchParams"
 import { TableCell } from "@shared/ui/table/TableCell"
 import { highlightText } from "@shared/utils/highlightText"
 
