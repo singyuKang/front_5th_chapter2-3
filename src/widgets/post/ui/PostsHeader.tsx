@@ -1,5 +1,5 @@
 import { useModal } from "@features/modal/hooks/useModal"
-import { Button } from "@shared/ui"
+import { Button } from "@shared/ui/button/Button"
 import { Plus } from "lucide-react"
 
 export const PostsHeader: React.FC = () => {

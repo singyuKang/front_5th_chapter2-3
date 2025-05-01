@@ -1,10 +1,10 @@
 import { Comment } from "@entities/comment/model/types"
 import { useCommentsByPostId, useDeleteComment, useLikeComment } from "../api/api"
 import { highlightText } from "@shared/utils/highlightText"
-import { Button } from "@shared/ui"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import { useModal } from "@features/modal/hooks/useModal"
 import { useSelectedComment } from "../hooks/useSelectedComment"
+import { Button } from "@shared/ui/button/Button"
 
 interface PropsType {
   postId: number
@@ -83,7 +83,6 @@ export const CommentInfoBox: React.FC<PropsType> = ({ postId, searchQuery }) => 
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  // TODO : Delete Comment
                   handleDeleteClick(comment)
                 }}
               >

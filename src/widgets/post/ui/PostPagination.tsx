@@ -1,6 +1,6 @@
 import { useSearchParams } from "@features/filter/model/useSearchParams"
 import { pageValue } from "@features/post/config/pagaValue"
-import { Button } from "@shared/ui"
+import { Button } from "@shared/ui/button/Button"
 import { SelectRoot } from "@shared/ui/select/SelectRoot"
 
 interface PostPaginationProps {

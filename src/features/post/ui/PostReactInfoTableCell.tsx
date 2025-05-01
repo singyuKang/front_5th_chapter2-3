@@ -1,5 +1,5 @@
 import { Post } from "@entities/post/model/type"
-import { Button } from "@shared/ui"
+import { Button } from "@shared/ui/button/Button"
 import { TableCell } from "@shared/ui/table/TableCell"
 import { Edit2, MessageSquare, Trash2 } from "lucide-react"
 import { useDeletePost } from "../api/api"

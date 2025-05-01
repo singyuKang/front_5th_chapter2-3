@@ -1,5 +1,5 @@
 import { useModal } from "@features/modal/hooks/useModal"
-import { Button } from "@shared/ui"
+import { Button } from "@shared/ui/button/Button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { Textarea } from "@shared/ui/textarea/TextArea"
 import useCommentForm from "../hooks/useCommentForm"
