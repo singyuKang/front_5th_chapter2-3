@@ -1,4 +1,4 @@
-import { Post } from "@entities/post/model/type"
+import { Post } from "@entities/post/model"
 import { Button } from "@shared/ui/button/Button"
 import { TableCell } from "@shared/ui/table/TableCell"
 import { Edit2, MessageSquare, Trash2 } from "lucide-react"

@@ -1,6 +1,6 @@
 import { forwardRef } from "react"
 
-export interface TableProps<T> extends React.HTMLAttributes<T> {
+interface TableProps<T> extends React.HTMLAttributes<T> {
   className?: string
 }
 

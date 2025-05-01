@@ -1,5 +1,5 @@
 import { apiFetch } from "@shared/utils/apiFetch"
-import { Comment, CommentsResponse, DeletedCommentResponse, NewComment } from "../model/types"
+import { Comment, CommentsResponse, DeletedCommentResponse, NewComment } from "../model"
 
 export const getCommentsByPostIdApi = async (postId: number): Promise<CommentsResponse> => {
   try {

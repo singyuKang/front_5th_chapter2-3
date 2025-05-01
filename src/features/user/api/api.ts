@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getUserByIdApi } from "../../../entities/user/api/api"
 import { User } from "@entities/user/model/types"
 import { userCache } from "@entities/user/lib"
-import { authorValue } from "../config/autherValue"
+import { authorValue } from "../config/authorValue"
 
 export const useUserById = (userId: number, options = {}) => {
   return useQuery({

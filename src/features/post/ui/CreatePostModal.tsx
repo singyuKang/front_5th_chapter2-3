@@ -5,7 +5,7 @@ import { Input } from "@shared/ui/input/Input"
 import { Textarea } from "@shared/ui/textarea/TextArea"
 import { useState } from "react"
 import { useMutationPostCreate } from "../api/api"
-import { PostForm } from "@entities/post/model/type"
+import { PostForm } from "@entities/post/model"
 
 const CreatePostModal = () => {
   const postInitialValue = {

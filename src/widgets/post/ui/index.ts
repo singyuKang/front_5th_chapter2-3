@@ -1,1 +1,6 @@
-export { PostsHeader } from "./PostsHeader"
+export * from "./PostsHeader"
+export * from "./PostPagination"
+export * from "./PostsTableContainer"
+export * from "./PostTableBody"
+export * from "./PostTableHeader"
+export * from "./PostTotalTable"

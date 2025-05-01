@@ -1,5 +1,5 @@
 import { SearchParams } from "@features/filter/model/types"
-import { Post, PostForm, PostResponse } from "../model/type"
+import { Post, PostForm, PostResponse } from "../model/types"
 import { buildURLPath } from "@features/filter/utils/buildURLPath"
 import { apiFetch } from "@shared/utils/apiFetch"
 
